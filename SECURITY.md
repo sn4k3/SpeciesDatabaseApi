@@ -12,4 +12,4 @@ We don't support previous nor legacy versions.
 
 ## Reporting a Vulnerability
 
-If you found a vulnerability within code or execution, please report clicking [here](https://github.com/sn4k3/SharpSubtitles/issues/new?assignees=sn4k3&labels=&template=bug_report.md&title=%5BVulnerability%5D+) and describing all in detail.
+If you found a vulnerability within code or execution, please report clicking [here](https://github.com/sn4k3/SpeciesDatabaseApi/issues/new?assignees=sn4k3&labels=&template=bug_report.md&title=%5BVulnerability%5D+) and describing all in detail.
