@@ -92,3 +92,42 @@ TaxonName: White Shark, Primary: True, Language: eng
 TaxonName: Great White Shark, Primary: False, Language: eng
 ```
 </details>
+
+## Command-line
+
+The project **[SpeciesDatabaseCmd](https://github.com/sn4k3/SpeciesDatabaseApi/tree/master/SpeciesDatabaseCmd)** allow to call all the API using the command-line and also provide a sample on how to use the library.  
+Run the "SpeciesDatabaseCmd.exe" and follow the in-terminal instructions to call the commands.
+
+### Example: 
+
+```bash
+# Usage:
+#   SpeciesDatabaseCmd [command] [options]
+# 
+# Options:
+#   --version       Show version information
+#   -?, -h, --help  Show help and usage information
+# 
+# Commands:
+#   WORMS  Query - World Register of Marine Species
+#   IUCN   Query - International Union for Conservation of Nature
+
+SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
+
+> Name: Carcharodon carcharias
+> Error:
+> Message:
+> IsSuccess: True
+> Count: 2
+> Results: 2
+> ## Result[0]:
+> TaxonName: White Shark
+> Primary: True
+> Language: eng
+> ## Result[1]:
+> TaxonName: Great White Shark
+> Primary: False
+> Language: eng
+```
+
+
