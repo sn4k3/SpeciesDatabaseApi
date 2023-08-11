@@ -131,3 +131,10 @@ SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
 ```
 
 
+# Link package (Visual Studio)
+
+- Via "Manage NuGet packages"
+- Manually via terminal:
+```powershell
+dotnet add package SpeciesDatabaseApi
+```
