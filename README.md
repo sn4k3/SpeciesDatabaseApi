@@ -11,11 +11,15 @@ Queries and fetch data from species, taxon and conservation database(s) to retri
 
 ## Clients
 
-| Acronym                                 | Name                                           | Class       |
-| --------------------------------------- | ---------------------------------------------- | ----------- |
-| [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) |
-| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)  |
+| Acronym                                 | Name                                           | Class                                                                                                          | Terms of use                                                  |
+| --------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
+| [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) | [Terms of use](https://www.marinespecies.org/about.php#terms) |
+| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)  | [Terms of use](http://apiv3.iucnredlist.org/about) |
 
+## Terms of use
+
+Before the use of any provider you must accept and follow the terms of use of each used client. 
+Please refer to the "terms of use" from the above links.  
 
 ## Structure
 
