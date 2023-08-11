@@ -48,31 +48,31 @@ public class AttributeKey : IEquatable<AttributeKey>
 
     public bool Equals(AttributeKey? other)
     {
-	    if (ReferenceEquals(null, other)) return false;
-	    if (ReferenceEquals(this, other)) return true;
-	    return MeasurementTypeId == other.MeasurementTypeId && MeasurementType == other.MeasurementType && InputId == other.InputId && CategoryId == other.CategoryId && Children.Equals(other.Children);
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return MeasurementTypeId == other.MeasurementTypeId && MeasurementType == other.MeasurementType && InputId == other.InputId && CategoryId == other.CategoryId && Children.Equals(other.Children);
     }
 
     public override bool Equals(object? obj)
     {
-	    if (ReferenceEquals(null, obj)) return false;
-	    if (ReferenceEquals(this, obj)) return true;
-	    if (obj.GetType() != this.GetType()) return false;
-	    return Equals((AttributeKey)obj);
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((AttributeKey)obj);
     }
 
     public static bool operator ==(AttributeKey? left, AttributeKey? right)
     {
-	    return Equals(left, right);
+        return Equals(left, right);
     }
 
     public static bool operator !=(AttributeKey? left, AttributeKey? right)
     {
-	    return !Equals(left, right);
+        return !Equals(left, right);
     }
 
     public override int GetHashCode()
     {
-	    return HashCode.Combine(MeasurementTypeId, MeasurementType, InputId, CategoryId, Children);
+        return HashCode.Combine(MeasurementTypeId, MeasurementType, InputId, CategoryId, Children);
     }
 }

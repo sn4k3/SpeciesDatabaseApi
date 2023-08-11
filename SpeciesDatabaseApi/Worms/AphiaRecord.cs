@@ -106,52 +106,52 @@ public class AphiaRecord : IEquatable<AphiaRecord>
     [XmlElement("phylum")]
     public string Phylum { get; set; } = string.Empty;
 
-	/// <summary>
-	/// The full scientific name of the class in which the taxon is classified
-	/// </summary>
-	[JsonPropertyName("class")]
+    /// <summary>
+    /// The full scientific name of the class in which the taxon is classified
+    /// </summary>
+    [JsonPropertyName("class")]
     [XmlElement("class")]
     public string Class { get; set; } = string.Empty;
 
-	/// <summary>
-	/// The full scientific name of the order in which the taxon is classified
-	/// </summary>
-	[JsonPropertyName("order")]
+    /// <summary>
+    /// The full scientific name of the order in which the taxon is classified
+    /// </summary>
+    [JsonPropertyName("order")]
     [XmlElement("order")]
     public string Order { get; set; } = string.Empty;
 
-	/// <summary>
-	/// The full scientific name of the family in which the taxon is classified
-	/// </summary>
-	[JsonPropertyName("family")]
+    /// <summary>
+    /// The full scientific name of the family in which the taxon is classified
+    /// </summary>
+    [JsonPropertyName("family")]
     [XmlElement("family")]
     public string Family { get; set; } = string.Empty;
 
-	/// <summary>
-	/// The full scientific name of the genus in which the taxon is classified
-	/// </summary>
-	[JsonPropertyName("genus")]
+    /// <summary>
+    /// The full scientific name of the genus in which the taxon is classified
+    /// </summary>
+    [JsonPropertyName("genus")]
     [XmlElement("genus")]
     public string Genus { get; set; } = string.Empty;
 
-	/// <summary>
-	/// A bibliographic reference for the resource as a statement indicating how this record should be cited (attributed) when used
-	/// </summary>
-	[JsonPropertyName("citation")]
+    /// <summary>
+    /// A bibliographic reference for the resource as a statement indicating how this record should be cited (attributed) when used
+    /// </summary>
+    [JsonPropertyName("citation")]
     [XmlElement("citation")]
     public string Citation { get; set; } = string.Empty;
 
-	/// <summary>
-	/// LifeScience Identifier. Persistent GUID for an AphiaID
-	/// </summary>
-	[JsonPropertyName("lsid")]
+    /// <summary>
+    /// LifeScience Identifier. Persistent GUID for an AphiaID
+    /// </summary>
+    [JsonPropertyName("lsid")]
     [XmlElement("lsid")]
     public string lsId { get; set; } = string.Empty;
 
-	/// <summary>
-	/// A flag indicating whether the taxon is a marine organism, i.e. can be found in/above sea water. Possible values: 0/1/NULL
-	/// </summary>
-	[JsonPropertyName("isMarine")]
+    /// <summary>
+    /// A flag indicating whether the taxon is a marine organism, i.e. can be found in/above sea water. Possible values: 0/1/NULL
+    /// </summary>
+    [JsonPropertyName("isMarine")]
     [XmlElement("isMarine")]
     public int? IsMarine { get; set; }
 
@@ -206,61 +206,61 @@ public class AphiaRecord : IEquatable<AphiaRecord>
 
     public bool Equals(AphiaRecord? other)
     {
-	    if (ReferenceEquals(null, other)) return false;
-	    if (ReferenceEquals(this, other)) return true;
-	    return AphiaId == other.AphiaId && Url.Equals(other.Url) && ScientificName == other.ScientificName && Authority == other.Authority && TaxonRankId == other.TaxonRankId && Rank == other.Rank && Status == other.Status && UnacceptReason == other.UnacceptReason && ValidAphiaID == other.ValidAphiaID && ValidName == other.ValidName && ValidAuthority == other.ValidAuthority && ParentNameUsageId == other.ParentNameUsageId && Kingdom == other.Kingdom && Phylum == other.Phylum && Class == other.Class && Order == other.Order && Family == other.Family && Genus == other.Genus && Citation == other.Citation && lsId == other.lsId && IsMarine == other.IsMarine && IsBrackish == other.IsBrackish && IsFreshwater == other.IsFreshwater && IsTerrestrial == other.IsTerrestrial && IsExtinct == other.IsExtinct && MatchType == other.MatchType && Nullable.Equals(Modified, other.Modified);
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return AphiaId == other.AphiaId && Url.Equals(other.Url) && ScientificName == other.ScientificName && Authority == other.Authority && TaxonRankId == other.TaxonRankId && Rank == other.Rank && Status == other.Status && UnacceptReason == other.UnacceptReason && ValidAphiaID == other.ValidAphiaID && ValidName == other.ValidName && ValidAuthority == other.ValidAuthority && ParentNameUsageId == other.ParentNameUsageId && Kingdom == other.Kingdom && Phylum == other.Phylum && Class == other.Class && Order == other.Order && Family == other.Family && Genus == other.Genus && Citation == other.Citation && lsId == other.lsId && IsMarine == other.IsMarine && IsBrackish == other.IsBrackish && IsFreshwater == other.IsFreshwater && IsTerrestrial == other.IsTerrestrial && IsExtinct == other.IsExtinct && MatchType == other.MatchType && Nullable.Equals(Modified, other.Modified);
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-	    if (ReferenceEquals(null, obj)) return false;
-	    if (ReferenceEquals(this, obj)) return true;
-	    if (obj.GetType() != this.GetType()) return false;
-	    return Equals((AphiaRecord)obj);
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((AphiaRecord)obj);
     }
 
     public static bool operator ==(AphiaRecord? left, AphiaRecord? right)
     {
-	    return Equals(left, right);
+        return Equals(left, right);
     }
 
     public static bool operator !=(AphiaRecord? left, AphiaRecord? right)
     {
-	    return !Equals(left, right);
+        return !Equals(left, right);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-	    var hashCode = new HashCode();
-	    hashCode.Add(AphiaId);
-	    hashCode.Add(Url);
-	    hashCode.Add(ScientificName);
-	    hashCode.Add(Authority);
-	    hashCode.Add(TaxonRankId);
-	    hashCode.Add(Rank);
-	    hashCode.Add(Status);
-	    hashCode.Add(UnacceptReason);
-	    hashCode.Add(ValidAphiaID);
-	    hashCode.Add(ValidName);
-	    hashCode.Add(ValidAuthority);
-	    hashCode.Add(ParentNameUsageId);
-	    hashCode.Add(Kingdom);
-	    hashCode.Add(Phylum);
-	    hashCode.Add(Class);
-	    hashCode.Add(Order);
-	    hashCode.Add(Family);
-	    hashCode.Add(Genus);
-	    hashCode.Add(Citation);
-	    hashCode.Add(lsId);
-	    hashCode.Add(IsMarine);
-	    hashCode.Add(IsBrackish);
-	    hashCode.Add(IsFreshwater);
-	    hashCode.Add(IsTerrestrial);
-	    hashCode.Add(IsExtinct);
-	    hashCode.Add((int)MatchType);
-	    hashCode.Add(Modified);
-	    return hashCode.ToHashCode();
+        var hashCode = new HashCode();
+        hashCode.Add(AphiaId);
+        hashCode.Add(Url);
+        hashCode.Add(ScientificName);
+        hashCode.Add(Authority);
+        hashCode.Add(TaxonRankId);
+        hashCode.Add(Rank);
+        hashCode.Add(Status);
+        hashCode.Add(UnacceptReason);
+        hashCode.Add(ValidAphiaID);
+        hashCode.Add(ValidName);
+        hashCode.Add(ValidAuthority);
+        hashCode.Add(ParentNameUsageId);
+        hashCode.Add(Kingdom);
+        hashCode.Add(Phylum);
+        hashCode.Add(Class);
+        hashCode.Add(Order);
+        hashCode.Add(Family);
+        hashCode.Add(Genus);
+        hashCode.Add(Citation);
+        hashCode.Add(lsId);
+        hashCode.Add(IsMarine);
+        hashCode.Add(IsBrackish);
+        hashCode.Add(IsFreshwater);
+        hashCode.Add(IsTerrestrial);
+        hashCode.Add(IsExtinct);
+        hashCode.Add((int)MatchType);
+        hashCode.Add(Modified);
+        return hashCode.ToHashCode();
     }
 }

@@ -87,44 +87,44 @@ public class Distribution : IEquatable<Distribution>
 
     public bool Equals(Distribution? other)
     {
-	    if (ReferenceEquals(null, other)) return false;
-	    if (ReferenceEquals(this, other)) return true;
-	    return Locality == other.Locality && LocationId == other.LocationId && HigherGeography == other.HigherGeography && HigherGeographyId == other.HigherGeographyId && RecordStatus == other.RecordStatus && TypeStatus == other.TypeStatus && EstablishmentMeans == other.EstablishmentMeans && DecimalLatitude == other.DecimalLatitude && DecimalLongitude == other.DecimalLongitude && QualityStatus == other.QualityStatus;
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Locality == other.Locality && LocationId == other.LocationId && HigherGeography == other.HigherGeography && HigherGeographyId == other.HigherGeographyId && RecordStatus == other.RecordStatus && TypeStatus == other.TypeStatus && EstablishmentMeans == other.EstablishmentMeans && DecimalLatitude == other.DecimalLatitude && DecimalLongitude == other.DecimalLongitude && QualityStatus == other.QualityStatus;
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-	    if (ReferenceEquals(null, obj)) return false;
-	    if (ReferenceEquals(this, obj)) return true;
-	    if (obj.GetType() != this.GetType()) return false;
-	    return Equals((Distribution)obj);
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Distribution)obj);
     }
 
     public static bool operator ==(Distribution? left, Distribution? right)
     {
-	    return Equals(left, right);
+        return Equals(left, right);
     }
 
     public static bool operator !=(Distribution? left, Distribution? right)
     {
-	    return !Equals(left, right);
+        return !Equals(left, right);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-	    var hashCode = new HashCode();
-	    hashCode.Add(Locality);
-	    hashCode.Add(LocationId);
-	    hashCode.Add(HigherGeography);
-	    hashCode.Add(HigherGeographyId);
-	    hashCode.Add((int)RecordStatus);
-	    hashCode.Add(TypeStatus);
-	    hashCode.Add(EstablishmentMeans);
-	    hashCode.Add(DecimalLatitude);
-	    hashCode.Add(DecimalLongitude);
-	    hashCode.Add(QualityStatus);
-	    return hashCode.ToHashCode();
+        var hashCode = new HashCode();
+        hashCode.Add(Locality);
+        hashCode.Add(LocationId);
+        hashCode.Add(HigherGeography);
+        hashCode.Add(HigherGeographyId);
+        hashCode.Add((int)RecordStatus);
+        hashCode.Add(TypeStatus);
+        hashCode.Add(EstablishmentMeans);
+        hashCode.Add(DecimalLatitude);
+        hashCode.Add(DecimalLongitude);
+        hashCode.Add(QualityStatus);
+        return hashCode.ToHashCode();
     }
 }

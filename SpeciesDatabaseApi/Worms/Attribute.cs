@@ -86,44 +86,44 @@ public class Attribute : IEquatable<Attribute>
 
     public bool Equals(Attribute? other)
     {
-	    if (ReferenceEquals(null, other)) return false;
-	    if (ReferenceEquals(this, other)) return true;
-	    return AphiaId == other.AphiaId && MeasurementTypeId == other.MeasurementTypeId && MeasurementType == other.MeasurementType && MeasurementValue == other.MeasurementValue && SourceId == other.SourceId && Reference == other.Reference && QualityStatus == other.QualityStatus && CategoryId == other.CategoryId && AphiaIdInherited == other.AphiaIdInherited && Children.Equals(other.Children);
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return AphiaId == other.AphiaId && MeasurementTypeId == other.MeasurementTypeId && MeasurementType == other.MeasurementType && MeasurementValue == other.MeasurementValue && SourceId == other.SourceId && Reference == other.Reference && QualityStatus == other.QualityStatus && CategoryId == other.CategoryId && AphiaIdInherited == other.AphiaIdInherited && Children.Equals(other.Children);
     }
 
     public static bool operator ==(Attribute? left, Attribute? right)
     {
-	    return Equals(left, right);
+        return Equals(left, right);
     }
 
     public static bool operator !=(Attribute? left, Attribute? right)
     {
-	    return !Equals(left, right);
+        return !Equals(left, right);
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-	    if (ReferenceEquals(null, obj)) return false;
-	    if (ReferenceEquals(this, obj)) return true;
-	    if (obj.GetType() != this.GetType()) return false;
-	    return Equals((Attribute)obj);
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Attribute)obj);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-	    var hashCode = new HashCode();
-	    hashCode.Add(AphiaId);
-	    hashCode.Add(MeasurementTypeId);
-	    hashCode.Add(MeasurementType);
-	    hashCode.Add(MeasurementValue);
-	    hashCode.Add(SourceId);
-	    hashCode.Add(Reference);
-	    hashCode.Add((int)QualityStatus);
-	    hashCode.Add(CategoryId);
-	    hashCode.Add(AphiaIdInherited);
-	    hashCode.Add(Children);
-	    return hashCode.ToHashCode();
+        var hashCode = new HashCode();
+        hashCode.Add(AphiaId);
+        hashCode.Add(MeasurementTypeId);
+        hashCode.Add(MeasurementType);
+        hashCode.Add(MeasurementValue);
+        hashCode.Add(SourceId);
+        hashCode.Add(Reference);
+        hashCode.Add((int)QualityStatus);
+        hashCode.Add(CategoryId);
+        hashCode.Add(AphiaIdInherited);
+        hashCode.Add(Children);
+        return hashCode.ToHashCode();
     }
 }

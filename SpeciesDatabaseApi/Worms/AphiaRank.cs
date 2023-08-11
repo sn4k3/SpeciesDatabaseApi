@@ -42,33 +42,33 @@ public class AphiaRank : IEquatable<AphiaRank>
 
     public bool Equals(AphiaRank? other)
     {
-	    if (ReferenceEquals(null, other)) return false;
-	    if (ReferenceEquals(this, other)) return true;
-	    return TaxonRankId == other.TaxonRankId && TaxonRank == other.TaxonRank && AphiaId == other.AphiaId && Kingdom == other.Kingdom;
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return TaxonRankId == other.TaxonRankId && TaxonRank == other.TaxonRank && AphiaId == other.AphiaId && Kingdom == other.Kingdom;
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-	    if (ReferenceEquals(null, obj)) return false;
-	    if (ReferenceEquals(this, obj)) return true;
-	    if (obj.GetType() != this.GetType()) return false;
-	    return Equals((AphiaRank)obj);
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((AphiaRank)obj);
     }
 
     public static bool operator ==(AphiaRank? left, AphiaRank? right)
     {
-	    return Equals(left, right);
+        return Equals(left, right);
     }
 
     public static bool operator !=(AphiaRank? left, AphiaRank? right)
     {
-	    return !Equals(left, right);
+        return !Equals(left, right);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
-	    return HashCode.Combine(TaxonRankId, TaxonRank, AphiaId, Kingdom);
+        return HashCode.Combine(TaxonRankId, TaxonRank, AphiaId, Kingdom);
     }
 }

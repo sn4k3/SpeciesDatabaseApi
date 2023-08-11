@@ -5,6 +5,6 @@
 /// </summary>
 public enum ClientProvider
 {
-	WoRMS,
-	IUCN
+    WoRMS,
+    IUCN
 }
