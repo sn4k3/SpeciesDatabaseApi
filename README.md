@@ -15,7 +15,7 @@ Queries and fetch data from species, taxon and conservation database(s) to retri
 | --------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
 | [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) | [Terms of use](https://www.marinespecies.org/about.php#terms) |
 | [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)    | [Terms of use](http://apiv3.iucnredlist.org/about) |
-| [MR](https://www.iucn.org)              | Marine Regions                                 | [MrClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Mr/MrClient.cs)          | [Terms of use](https://marineregions.org/disclaimer.php) |
+| [MR](https://www.marineregions.org)     | Marine Regions                                 | [MrClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Mr/MrClient.cs)          | [Terms of use](https://www.marineregions.org/disclaimer.php) |
 
 ## Terms of use
 
