@@ -51,8 +51,8 @@ jobs:
 
           - os: macos-latest
             artifact_name: "SpeciesDatabaseCmd_macos-x64_${{  github.ref_name }}.zip"
-            asset_name: "SpeciesDatabaseCmd_macos-x64_${{  github.ref_name }}"
-            os_identifier: macos-x64
+            asset_name: "SpeciesDatabaseCmd_osx-x64_${{  github.ref_name }}"
+            os_identifier: osx-x64
 
     steps:
       - name: 🛒 Checkout
