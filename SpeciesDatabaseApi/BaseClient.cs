@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -23,12 +22,12 @@ namespace SpeciesDatabaseApi;
 
 public abstract class BaseClient : BindableBase, IDisposable
 {
-    #region Constants
+	#region Constants
 
-    private static readonly Lazy<HttpClient> HttpClientShared = new(() =>
-    {
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", AboutLibrary.SoftwareWithVersion);
+	private static readonly Lazy<HttpClient> HttpClientShared = new(() =>
+	{
+		var httpClient = new HttpClient();
+		httpClient.DefaultRequestHeaders.Add("User-Agent", AboutLibrary.SoftwareWithVersion);
         return httpClient;
     });
 
@@ -110,7 +109,7 @@ public abstract class BaseClient : BindableBase, IDisposable
         get
         {
             var domain = ApiAddress.GetLeftPart(UriPartial.Authority);
-            return Regex.Replace(domain, @"\/\/(.*api|www)[.]", "//");
+            return Regex.Replace(domain, @"\/\/(.*api([a-zA-Z0-9_-]+)?|www)[.]", "//");
         }
     }
 
@@ -158,6 +157,12 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// Gets or sets the product info header to send with the requests
     /// </summary>
     public ProductInfoHeaderValue? ProductInfoHeader { get; set; }
+
+    /// <summary>
+    /// Gets or sets if it should throw an exception when the request code is other than success.<br/>
+    /// If false it will return a null object
+    /// </summary>
+    public bool ThrowExceptionIfRequestStatusCodeFails { get; set; } = true;
 
     #endregion
 
@@ -220,7 +225,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    public string GetRawRequestUrl(string path) => $"{ApiAddress}/{path.Trim(' ', '/')}";
+    public string GetRawRequestUrl(string path) => $"{ApiAddress}/{path.TrimStart(' ', '/').TrimEnd()}";
 
     public string GetRequestUrl(string path)
     {
@@ -239,7 +244,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// <param name="path">Partial path without Api address</param>
     /// <param name="parameters">Parameters to send with the request</param>
     /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, IEnumerable<KeyValuePair<string, object>> parameters)
+    public string GetRequestUrl(string path, IEnumerable<KeyValuePair<string, object?>> parameters)
     {
         return $"{GetRawRequestUrl(path)}{GetUrlParametersString(parameters)}";
     }
@@ -250,7 +255,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// <param name="path">Partial path without Api address</param>
     /// <param name="parameters">Parameters to send with the request</param>
     /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, IReadOnlyDictionary<string, object> parameters) => GetRequestUrl(path, parameters.AsEnumerable());
+    public string GetRequestUrl(string path, IReadOnlyDictionary<string, object?> parameters) => GetRequestUrl(path, parameters.AsEnumerable());
 
     /// <summary>
     /// Gets the absolute url for an request to the Api
@@ -258,7 +263,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// <param name="path">Partial path without Api address</param>
     /// <param name="parameter">Parameter to send with the request</param>
     /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, KeyValuePair<string, object> parameter) => GetRequestUrl(path, new[] { parameter });
+    public string GetRequestUrl(string path, KeyValuePair<string, object?> parameter) => GetRequestUrl(path, new[] { parameter });
 
     /// <summary>
     /// Gets the absolute url for an request to the Api
@@ -276,14 +281,42 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// </summary>
     /// <param name="parameters"></param>
     /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(IEnumerable<KeyValuePair<string, object>> parameters)
+    public string GetUrlParametersString(IEnumerable<KeyValuePair<string, object?>> parameters)
     {
         var builder = new StringBuilder();
 
         // Sort the parameters alphabetically to avoid http redirection.
         foreach (var item in parameters.OrderBy(x => x.Key))
         {
-            builder.Append($"{(builder.Length == 0 ? "?" : " & ")}{UrlEncode(item.Key.ToLowerInvariant())}={UrlEncode(item.Value.ToString()?.ToLowerInvariant() ?? string.Empty)}");
+	        string? value;
+	        switch (item.Value)
+	        {
+		        case null:
+			        continue;
+		        case IList list:
+			        if (list.Count == 0) continue;
+
+			        var items = new List<string>(list.Count);
+			        foreach (var obj in list)
+			        {
+				        if (obj is null) continue;
+				        value = obj.ToString()?.Trim().ToLowerInvariant();
+                        if (string.IsNullOrWhiteSpace(value)) continue;
+						items.Add(value);
+			        }
+			        value = string.Join(',', items);
+			        break;
+		        case string str:
+			        value = str.Trim().ToLowerInvariant();
+			        if (string.IsNullOrWhiteSpace(value)) continue;
+			        break;
+				default:
+	                value = item.Value.ToString()?.Trim().ToLowerInvariant();
+	                if (string.IsNullOrWhiteSpace(value)) continue;
+                    break;
+            }
+
+			builder.Append($"{(builder.Length == 0 ? "?" : " & ")}{UrlEncode(item.Key.ToLowerInvariant())}={UrlEncode(value)}");
         }
 
         if (ApiToken is { CanUse: true, Placement: ApiTokenPlacement.Get })
@@ -299,14 +332,14 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// </summary>
     /// <param name="parameters"></param>
     /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(IReadOnlyDictionary<string, object> parameters) => GetUrlParametersString(parameters.AsEnumerable());
+    public string GetUrlParametersString(IReadOnlyDictionary<string, object?> parameters) => GetUrlParametersString(parameters.AsEnumerable());
 
     /// <summary>
     /// Gets the parameters string from a dictionary of key and values parameters
     /// </summary>
     /// <param name="keyValue"></param>
     /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(KeyValuePair<string, object> keyValue) => GetUrlParametersString(new[]{ keyValue });
+    public string GetUrlParametersString(KeyValuePair<string, object?> keyValue) => GetUrlParametersString(new[]{ keyValue });
 
     /// <summary>
     /// Gets the parameters string from a class (Reflection)
@@ -315,7 +348,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// <returns>The formatted string</returns>
     public string GetUrlParametersString(object? obj)
     {
-        var dict = new Dictionary<string, object>();
+        var dict = new Dictionary<string, object?>();
 
         if (obj is not null)
         {
@@ -326,23 +359,6 @@ public abstract class BaseClient : BindableBase, IDisposable
                 var method = propertyInfo.GetMethod;
                 if (method is null) continue;
                 var value = propertyInfo.GetValue(obj);
-
-                switch (value)
-                {
-                    case null:
-                        continue;
-                    case IList list:
-                        if (list.Count == 0) continue;
-
-                        var items = new List<string>(list.Count);
-                        foreach (var item in list)
-                        {
-                            if (item is null) continue;
-                            items.Add(item.ToString()!);
-                        }
-                        value = string.Join(',', items);
-                        break;
-                }
 
                 var attr = propertyInfo.GetCustomAttribute<JsonPropertyNameAttribute>();
                 dict.Add(attr?.Name ?? method.Name, value);
@@ -376,7 +392,7 @@ public abstract class BaseClient : BindableBase, IDisposable
 
         return request;
     }
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IEnumerable<KeyValuePair<string, object>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
 
@@ -386,7 +402,7 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IReadOnlyDictionary<string, object> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
 
@@ -396,7 +412,7 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, KeyValuePair<string, object> urlParameter, CancellationToken cancellationToken = default)
+    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Post);
 
@@ -426,19 +442,19 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> GetJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> GetJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> GetJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> GetJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> GetJsonAsync<T>(string requestUrl, KeyValuePair<string, object> urlParameter, CancellationToken cancellationToken = default)
+    public Task<T?> GetJsonAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Get);
         return SendRequestAsync<T>(request, cancellationToken);
@@ -456,19 +472,19 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, KeyValuePair<string, object> urlParameter, CancellationToken cancellationToken = default)
+    public Task<T?> DeleteJsonAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
     {
         using var request = PrepareJsonHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Delete);
         return SendRequestAsync<T>(request, cancellationToken);
@@ -520,26 +536,28 @@ public abstract class BaseClient : BindableBase, IDisposable
                 await Task.Delay(waitTime, cancellationToken).ConfigureAwait(false);
             } while (RequestsHitLimit);
         }
-        
-        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        Interlocked.Increment(ref _totalRequests);
 
-        response.EnsureSuccessStatusCode();
+		using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-        switch (response.StatusCode)
-        {
-            case HttpStatusCode.NoContent:
-                return default;
-        }
+		Interlocked.Increment(ref _totalRequests);
 
-        if (_autoWaitForRequestLimit && _maximumRequestsPerSecond > 0)
-        {
-            Interlocked.Increment(ref _requestsInCurrentSecond);
-            _resetRequestsTimer.Start();
-        }
-        
-        return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
-    }
+		if (ThrowExceptionIfRequestStatusCodeFails) response.EnsureSuccessStatusCode();
+		else if (!response.IsSuccessStatusCode) return default;
+
+		switch (response.StatusCode)
+		{
+			case HttpStatusCode.NoContent:
+				return default;
+		}
+
+		if (_autoWaitForRequestLimit && _maximumRequestsPerSecond > 0)
+		{
+			Interlocked.Increment(ref _requestsInCurrentSecond);
+			_resetRequestsTimer.Start();
+		}
+
+		return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+	}
 
     #endregion
 }

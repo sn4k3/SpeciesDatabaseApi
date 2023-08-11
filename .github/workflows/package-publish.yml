@@ -32,3 +32,53 @@ jobs:
 
       - name: 🚀 Push nuget.org
         run: dotnet nuget push SpeciesDatabaseApi*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_TOKEN} --skip-duplicate
+
+  publish:
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: SpeciesDatabaseCmd_win-x64_$tag.zip
+            asset_name: SpeciesDatabaseCmd_linux-x64_$tag
+            os_identifier: linux-x64
+
+          - os: windows-latest
+            artifact_name: SpeciesDatabaseCmd_win-x64_$tag.zip
+            asset_name: SpeciesDatabaseCmd_win-x64_$tag
+            os_identifier: win-x64
+
+          - os: macos-latest
+            artifact_name: SpeciesDatabaseCmd_macos-x64_$tag.zip
+            asset_name: SpeciesDatabaseCmd_macos-x64_$tag
+            os_identifier: macos-x64
+
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v3
+      - name: Verify commit exists in origin/master
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          git branch --remote --contains | grep origin/master
+
+      - name: 🟣 Setup .NET 7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: 🔧 Build
+        run: | 
+          dotnet publish SpeciesDatabaseCmd -o ${{ matrix.asset_name }} -c Release -r ${{ matrix.os_identifier }} -p:PublishReadyToRun=true --self-contained
+
+      - name: 📦 Zip
+        run: | 
+          zip -rq ${{ matrix.asset_name }} .
+
+      - name: 🚀 Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}

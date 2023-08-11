@@ -62,14 +62,14 @@ public class AphiaRecord : IEquatable<AphiaRecord>
     /// </summary>
     [JsonPropertyName("unacceptreason")]
     [XmlElement("unacceptreason")]
-    public string? UnacceptReason { get; set; }
+    public string? UnAcceptReason { get; set; }
 
     /// <summary>
     /// The AphiaID (for the <see cref="ScientificName"/>) of the currently accepted taxon. NULL if there is no currently accepted taxon.
     /// </summary>
     [JsonPropertyName("valid_AphiaID")]
     [XmlElement("valid_AphiaID")]
-    public int? ValidAphiaID { get; set; }
+    public int? ValidAphiaId { get; set; }
 
     /// <summary>
     /// The <see cref="ScientificName"/> of the currently accepted taxon
@@ -146,7 +146,7 @@ public class AphiaRecord : IEquatable<AphiaRecord>
     /// </summary>
     [JsonPropertyName("lsid")]
     [XmlElement("lsid")]
-    public string lsId { get; set; } = string.Empty;
+    public string LsId { get; set; } = string.Empty;
 
     /// <summary>
     /// A flag indicating whether the taxon is a marine organism, i.e. can be found in/above sea water. Possible values: 0/1/NULL
@@ -201,14 +201,14 @@ public class AphiaRecord : IEquatable<AphiaRecord>
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{nameof(AphiaId)}: {AphiaId}, {nameof(Url)}: {Url}, {nameof(ScientificName)}: {ScientificName}, {nameof(Authority)}: {Authority}, {nameof(TaxonRankId)}: {TaxonRankId}, {nameof(Rank)}: {Rank}, {nameof(Status)}: {Status}, {nameof(UnacceptReason)}: {UnacceptReason}, {nameof(ValidAphiaID)}: {ValidAphiaID}, {nameof(ValidName)}: {ValidName}, {nameof(ValidAuthority)}: {ValidAuthority}, {nameof(ParentNameUsageId)}: {ParentNameUsageId}, {nameof(Kingdom)}: {Kingdom}, {nameof(Phylum)}: {Phylum}, {nameof(Class)}: {Class}, {nameof(Order)}: {Order}, {nameof(Family)}: {Family}, {nameof(Genus)}: {Genus}, {nameof(Citation)}: {Citation}, {nameof(lsId)}: {lsId}, {nameof(IsMarine)}: {IsMarine}, {nameof(IsBrackish)}: {IsBrackish}, {nameof(IsFreshwater)}: {IsFreshwater}, {nameof(IsTerrestrial)}: {IsTerrestrial}, {nameof(IsExtinct)}: {IsExtinct}, {nameof(MatchType)}: {MatchType}, {nameof(Modified)}: {Modified}";
+        return $"{nameof(AphiaId)}: {AphiaId}, {nameof(Url)}: {Url}, {nameof(ScientificName)}: {ScientificName}, {nameof(Authority)}: {Authority}, {nameof(TaxonRankId)}: {TaxonRankId}, {nameof(Rank)}: {Rank}, {nameof(Status)}: {Status}, {nameof(UnAcceptReason)}: {UnAcceptReason}, {nameof(ValidAphiaId)}: {ValidAphiaId}, {nameof(ValidName)}: {ValidName}, {nameof(ValidAuthority)}: {ValidAuthority}, {nameof(ParentNameUsageId)}: {ParentNameUsageId}, {nameof(Kingdom)}: {Kingdom}, {nameof(Phylum)}: {Phylum}, {nameof(Class)}: {Class}, {nameof(Order)}: {Order}, {nameof(Family)}: {Family}, {nameof(Genus)}: {Genus}, {nameof(Citation)}: {Citation}, {nameof(LsId)}: {LsId}, {nameof(IsMarine)}: {IsMarine}, {nameof(IsBrackish)}: {IsBrackish}, {nameof(IsFreshwater)}: {IsFreshwater}, {nameof(IsTerrestrial)}: {IsTerrestrial}, {nameof(IsExtinct)}: {IsExtinct}, {nameof(MatchType)}: {MatchType}, {nameof(Modified)}: {Modified}";
     }
 
     public bool Equals(AphiaRecord? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return AphiaId == other.AphiaId && Url.Equals(other.Url) && ScientificName == other.ScientificName && Authority == other.Authority && TaxonRankId == other.TaxonRankId && Rank == other.Rank && Status == other.Status && UnacceptReason == other.UnacceptReason && ValidAphiaID == other.ValidAphiaID && ValidName == other.ValidName && ValidAuthority == other.ValidAuthority && ParentNameUsageId == other.ParentNameUsageId && Kingdom == other.Kingdom && Phylum == other.Phylum && Class == other.Class && Order == other.Order && Family == other.Family && Genus == other.Genus && Citation == other.Citation && lsId == other.lsId && IsMarine == other.IsMarine && IsBrackish == other.IsBrackish && IsFreshwater == other.IsFreshwater && IsTerrestrial == other.IsTerrestrial && IsExtinct == other.IsExtinct && MatchType == other.MatchType && Nullable.Equals(Modified, other.Modified);
+        return AphiaId == other.AphiaId && Url.Equals(other.Url) && ScientificName == other.ScientificName && Authority == other.Authority && TaxonRankId == other.TaxonRankId && Rank == other.Rank && Status == other.Status && UnAcceptReason == other.UnAcceptReason && ValidAphiaId == other.ValidAphiaId && ValidName == other.ValidName && ValidAuthority == other.ValidAuthority && ParentNameUsageId == other.ParentNameUsageId && Kingdom == other.Kingdom && Phylum == other.Phylum && Class == other.Class && Order == other.Order && Family == other.Family && Genus == other.Genus && Citation == other.Citation && LsId == other.LsId && IsMarine == other.IsMarine && IsBrackish == other.IsBrackish && IsFreshwater == other.IsFreshwater && IsTerrestrial == other.IsTerrestrial && IsExtinct == other.IsExtinct && MatchType == other.MatchType && Nullable.Equals(Modified, other.Modified);
     }
 
     /// <inheritdoc />
@@ -241,8 +241,8 @@ public class AphiaRecord : IEquatable<AphiaRecord>
         hashCode.Add(TaxonRankId);
         hashCode.Add(Rank);
         hashCode.Add(Status);
-        hashCode.Add(UnacceptReason);
-        hashCode.Add(ValidAphiaID);
+        hashCode.Add(UnAcceptReason);
+        hashCode.Add(ValidAphiaId);
         hashCode.Add(ValidName);
         hashCode.Add(ValidAuthority);
         hashCode.Add(ParentNameUsageId);
@@ -253,7 +253,7 @@ public class AphiaRecord : IEquatable<AphiaRecord>
         hashCode.Add(Family);
         hashCode.Add(Genus);
         hashCode.Add(Citation);
-        hashCode.Add(lsId);
+        hashCode.Add(LsId);
         hashCode.Add(IsMarine);
         hashCode.Add(IsBrackish);
         hashCode.Add(IsFreshwater);

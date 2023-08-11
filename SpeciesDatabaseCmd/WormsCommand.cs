@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using SpeciesDatabaseApi;
 using SpeciesDatabaseApi.Worms;
 
 namespace SpeciesDatabaseCmd;
@@ -34,7 +33,7 @@ internal static class WormsCommand
 
     internal static Command CreateCommand()
     {
-        var command = new Command(Client.ClientAcronym.ToUpper(), $"Query - {Client.ClientFullName}")
+        var command = new Command(Client.ClientAcronym.ToUpper(), Program.GetRootCommandDescription(Client))
         {
             //Attributes
             AphiaAttributeKeysByIdCommand(),

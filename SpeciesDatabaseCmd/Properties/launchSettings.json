@@ -47,6 +47,18 @@
     "IUCN SpeciesCitationById 2467 europe": {
       "commandName": "Project",
       "commandLineArgs": "IUCN SpecieCitationById 2467 europe"
+    },
+    "MR GazetteerRecordsByName belgian": {
+      "commandName": "Project",
+      "commandLineArgs": "MR GazetteerRecordsByName belgian"
+    },
+    "MR GazetteerRecordsByNames belgian portugal spain": {
+      "commandName": "Project",
+      "commandLineArgs": "MR GazetteerRecordsByNames belgian portugal spain"
+    },
+    "MR Feed": {
+      "commandName": "Project",
+      "commandLineArgs": "MR Feed"
     }
   }
 }

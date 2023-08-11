@@ -52,7 +52,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AttributeKey[]?> GetAphiaAttributeKeysById(int attributeId = 0, bool includeInherited = true, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("include_children", includeInherited);
+        var parameters = new KeyValuePair<string, object?>("include_children", includeInherited);
         return GetJsonAsync<AttributeKey[]>($"AphiaAttributeKeysByID/{attributeId}", parameters, token);
     }
 
@@ -65,7 +65,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<Attribute[]?> GetAphiaAttributesByAphiaId(int aphiaId, bool includeInherited = false, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("include_inherited", includeInherited);
+        var parameters = new KeyValuePair<string, object?>("include_inherited", includeInherited);
         return GetJsonAsync<Attribute[]>($"AphiaAttributesByAphiaID/{aphiaId}", parameters, token);
     }
 
@@ -89,7 +89,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaAttributeSet[]?> GetAphiaIDsByAttributeKeyId(int attributeId, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("offset", offset);
+        var parameters = new KeyValuePair<string, object?>("offset", offset);
         return GetJsonAsync<AphiaAttributeSet[]>($"AphiaIDsByAttributeKeyID/{attributeId}", parameters, token);
     }
     #endregion
@@ -117,7 +117,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<string[]?> GetAphiaExternalIdByAphiaId(int aphiaId, ExternalIdentifierType type, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("type", type);
+        var parameters = new KeyValuePair<string, object?>("type", type);
         return GetJsonAsync<string[]>($"AphiaExternalIDByAphiaID/{aphiaId}", parameters, token);
     }
 
@@ -130,7 +130,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord?> GetAphiaRecordByExternalId(string externalId, ExternalIdentifierType type, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("type", type);
+        var parameters = new KeyValuePair<string, object?>("type", type);
         return GetJsonAsync<AphiaRecord>($"AphiaRecordByExternalID/{externalId}", parameters, token);
     }
     #endregion
@@ -160,7 +160,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaChildrenByAphiaId(int aphiaId, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             {"marine_only", marineOnly},
             {"offset", offset},
@@ -188,7 +188,7 @@ public class WormsClient : BaseClient
     /// <returns>NULL when no match is found; -999 when multiple matches are found; an integer(AphiaID) when one exact match was found</returns>
     public Task<int?> GetAphiaIdByName(string scientificName, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object>("marine_only", marineOnly);
+        var parameters = new KeyValuePair<string, object?>("marine_only", marineOnly);
         return GetJsonAsync<int?>($"AphiaIDByName/{Uri.EscapeDataString(scientificName)}", parameters, token);
     }
 
@@ -235,7 +235,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaRecordsByAphiaIds(IEnumerable<int> aphiaIds, CancellationToken token = default)
     {
-        var parameters = aphiaIds.Select(aphiaId => new KeyValuePair<string, object>("aphiaids[]", aphiaId));
+        var parameters = aphiaIds.Select(aphiaId => new KeyValuePair<string, object?>("aphiaids[]", aphiaId));
         return GetJsonAsync<AphiaRecord[]>("AphiaRecordsByAphiaIDs", parameters, token);
     }
 
@@ -250,7 +250,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaRecordsByDate(DateTime startDate, DateTime endDate, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             {"startdate", startDate.ToString("O")},
             {"enddate", endDate.ToString("O")},
@@ -271,8 +271,8 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<List<AphiaRecord[]>?> GetAphiaRecordsByMatchNames(IEnumerable<string> scientificNames, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object>("scientificnames[]", aphiaId)).ToList();
-        parameters.Add(new KeyValuePair<string, object>("marine_only", marineOnly));
+        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object?>("scientificnames[]", aphiaId)).ToList();
+        parameters.Add(new ("marine_only", marineOnly));
         return GetJsonAsync<List<AphiaRecord[]>>("AphiaRecordsByMatchNames", parameters, token);
     }
 
@@ -287,7 +287,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaRecordsByName(string scientificName, bool like = true, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             {"like", like},
             {"marine_only", marineOnly},
@@ -308,9 +308,9 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<List<AphiaRecord[]>?> GetAphiaRecordsByNames(IEnumerable<string> scientificNames, bool like = false, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object>("scientificnames[]", aphiaId)).ToList();
-        parameters.Add(new KeyValuePair<string, object>("like", like));
-        parameters.Add(new KeyValuePair<string, object>("marine_only", marineOnly));
+        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object?>("scientificnames[]", aphiaId)).ToList();
+        parameters.Add(new ("like", like));
+        parameters.Add(new ("marine_only", marineOnly));
         return GetJsonAsync<List<AphiaRecord[]>>("AphiaRecordsByNames", parameters, token);
     }
 
@@ -324,7 +324,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaRecordsByTaxonRankId(int taxonId, int belongsToAphiaId, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             {"belongsTo", belongsToAphiaId},
             {"offset", offset},
@@ -341,7 +341,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord[]?> GetAphiaSynonymsByAphiaId(int aphiaId, int offset = 1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object>("offset", offset);
+        var parameter = new KeyValuePair<string, object?>("offset", offset);
         return GetJsonAsync<AphiaRecord[]>($"AphiaSynonymsByAphiaID/{aphiaId}", parameter, token);
     }
 
@@ -354,7 +354,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRank[]?> GetAphiaTaxonRanksById(int taxonId = -1, int aphiaId = -1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object>("AphiaID", aphiaId);
+        var parameter = new KeyValuePair<string, object?>("AphiaID", aphiaId);
         return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByID/{taxonId}", parameter, token);
     }
 
@@ -367,7 +367,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRank[]?> GetAphiaTaxonRanksByName(string taxonRank = "", int aphiaId = -1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object>("AphiaID", aphiaId);
+        var parameter = new KeyValuePair<string, object?>("AphiaID", aphiaId);
         return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByName/{Uri.EscapeDataString(taxonRank)}", parameter, token);
     }
     #endregion
@@ -383,7 +383,7 @@ public class WormsClient : BaseClient
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public Task<AphiaRecord[]?> GetAphiaRecordsByVernacular(string vernacular, bool like = false, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object>
+        var parameters = new Dictionary<string, object?>
         {
             {nameof(like), like},
             {nameof(offset), offset},

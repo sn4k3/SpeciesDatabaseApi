@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.CommandLine;
+using SpeciesDatabaseApi;
 
 namespace SpeciesDatabaseCmd;
 
@@ -10,7 +11,8 @@ internal class Program
         var rootCommand = new RootCommand("Query specific taxonomy and species database")
         {
             WormsCommand.CreateCommand(),
-            IucnCommand.CreateCommand()
+            IucnCommand.CreateCommand(),
+            MrCommand.CreateCommand()
         };
         
         try
@@ -24,6 +26,8 @@ internal class Program
         
         return 1;
     }
+
+    internal static string GetRootCommandDescription(BaseClient client) => $"Query - {client.ClientFullName} ({client.WebsiteUrl})";
 
     internal static string FormatResults(string? text)
     {

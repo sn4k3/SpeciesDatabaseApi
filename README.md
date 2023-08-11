@@ -1,9 +1,9 @@
 [![License](https://img.shields.io/github/license/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/LICENSE.txt)
 [![GitHub repo size](https://img.shields.io/github/repo-size/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
 [![Code size](https://img.shields.io/github/languages/code-size/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
-[![Total code](https://img.shields.io/tokei/lines/github/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
 [![Nuget](https://img.shields.io/nuget/v/SpeciesDatabaseApi?style=for-the-badge)](https://www.nuget.org/packages/SpeciesDatabaseApi)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/sn4k3?color=red&style=for-the-badge)](https://github.com/sponsors/sn4k3)
+<!--[![Downloads](https://img.shields.io/github/downloads/sn4k3/SpeciesDatabaseApi/total?style=for-the-badge)](https://github.com/sn4k3/SpeciesDatabaseApi/releases)!-->
 
 # Species Database Api
 
@@ -14,7 +14,8 @@ Queries and fetch data from species, taxon and conservation database(s) to retri
 | Acronym                                 | Name                                           | Class                                                                                                          | Terms of use                                                  |
 | --------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
 | [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) | [Terms of use](https://www.marinespecies.org/about.php#terms) |
-| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)  | [Terms of use](http://apiv3.iucnredlist.org/about) |
+| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)    | [Terms of use](http://apiv3.iucnredlist.org/about) |
+| [MR](https://www.iucn.org)              | Marine Regions                                 | [MrClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Mr/MrClient.cs)          | [Terms of use](https://marineregions.org/disclaimer.php) |
 
 ## Terms of use
 
@@ -76,7 +77,7 @@ Modified: 15/01/2008 17:27:08
 ## Example (IUCN)
 
 ```C#
-  private static readonly IucnClient Client = new IucnClient();
+  private static readonly IucnClient Client = new IucnClient("your-api-key");
 
   private async void Main()
   {
@@ -113,8 +114,9 @@ Run the "SpeciesDatabaseCmd.exe" and follow the in-terminal instructions to call
 #   -?, -h, --help  Show help and usage information
 # 
 # Commands:
-#   WORMS  Query - World Register of Marine Species
-#   IUCN   Query - International Union for Conservation of Nature
+#  WORMS  Query - World Register of Marine Species (https://marinespecies.org)
+#  IUCN   Query - International Union for Conservation of Nature (http://iucnredlist.org)
+#  MR     Query - Marine Regions (https://marineregions.org)
 
 SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
 

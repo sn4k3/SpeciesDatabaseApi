@@ -20,7 +20,7 @@ internal static class IucnCommand
 
     internal static Command CreateCommand()
     {
-        var command = new Command(Client.ClientAcronym.ToUpper(), $"Query - {Client.ClientFullName}")
+        var command = new Command(Client.ClientAcronym.ToUpper(), Program.GetRootCommandDescription(Client))
         {
             VersionCommand(),
 
