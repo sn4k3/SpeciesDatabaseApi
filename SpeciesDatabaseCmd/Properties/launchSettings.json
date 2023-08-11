@@ -1,0 +1,52 @@
+{
+  "profiles": {
+    "IUCN Version": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN Version"
+    },
+    "IUCN SpeciesCitationById Countries": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN Countries"
+    },
+    "IUCN CountrySpecies": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN CountrySpecies"
+    },
+    "IUCN CountrySpecies PT": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN CountrySpecies PT"
+    },
+    "IUCN Regions": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN Regions"
+    },
+    "IUCN Species": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN Species"
+    },
+    "IUCN Species europe": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN Species europe"
+    },
+    "IUCN SpeciesCount": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN SpeciesCount"
+    },
+    "IUCN SpeciesCount Europe": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN SpeciesCount europe"
+    },
+    "IUCN SpeciesCitationByName \"Loxodonta Africana\"": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN SpecieCitationByName \"Loxodonta Africana\""
+    },
+    "IUCN SpeciesCitationById 181008073": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN SpecieCitationById 181008073"
+    },
+    "IUCN SpeciesCitationById 2467 europe": {
+      "commandName": "Project",
+      "commandLineArgs": "IUCN SpecieCitationById 2467 europe"
+    }
+  }
+}
