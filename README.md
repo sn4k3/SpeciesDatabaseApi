@@ -1,3 +1,10 @@
+[![License](https://img.shields.io/github/license/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/LICENSE.txt)
+[![GitHub repo size](https://img.shields.io/github/repo-size/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
+[![Code size](https://img.shields.io/github/languages/code-size/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
+[![Total code](https://img.shields.io/tokei/lines/github/sn4k3/SpeciesDatabaseApi?style=for-the-badge)](#)
+[![Nuget](https://img.shields.io/nuget/v/SpeciesDatabaseApi?style=for-the-badge)](https://www.nuget.org/packages/SpeciesDatabaseApi)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/sn4k3?color=red&style=for-the-badge)](https://github.com/sponsors/sn4k3)
+
 # Species Database Api
 
 Queries and fetch data from species, taxon and conservation database(s) to retrieve information using the provider API.
@@ -6,8 +13,8 @@ Queries and fetch data from species, taxon and conservation database(s) to retri
 
 | Acronym                                 | Name                                           | Class       |
 | --------------------------------------- | ---------------------------------------------- | ----------- |
-| [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | WormsClient |
-| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | IucnClient  |
+| [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) |
+| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)  |
 
 
 ## Structure

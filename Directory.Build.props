@@ -11,7 +11,7 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryUrl>https://github.com/sn4k3/SpeciesDatabaseApi</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/sn4k3/SpeciesDatabaseApi</PackageProjectUrl>
-		<PackageReleaseNotes>https://github.com/sn4k3/SpeciesDatabaseApi/releases</PackageReleaseNotes>
+		<PackageReleaseNotes>https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/CHANGELOG.md</PackageReleaseNotes>
 		<PackageReadmeFile>$(MSBuildThisFileDirectory)README.md</PackageReadmeFile>
 		<PackageIcon>$(MSBuildThisFileDirectory)icon.png</PackageIcon>
 		<PackageTags>species, taxomy, taxomony, biota, database, api, rest, world register of marine species, wrms, worms, iucn, conservation, nature</PackageTags>
