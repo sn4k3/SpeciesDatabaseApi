@@ -40,18 +40,18 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: SpeciesDatabaseCmd_win-x64_$tag.zip
-            asset_name: SpeciesDatabaseCmd_linux-x64_$tag
+            artifact_name: "SpeciesDatabaseCmd_win-x64_${{  github.ref_name }}.zip"
+            asset_name: "SpeciesDatabaseCmd_linux-x64_${{  github.ref_name }}"
             os_identifier: linux-x64
 
           - os: windows-latest
-            artifact_name: SpeciesDatabaseCmd_win-x64_$tag.zip
-            asset_name: SpeciesDatabaseCmd_win-x64_$tag
+            artifact_name: "SpeciesDatabaseCmd_win-x64_${{  github.ref_name }}.zip"
+            asset_name: "SpeciesDatabaseCmd_win-x64_${{  github.ref_name }}"
             os_identifier: win-x64
 
           - os: macos-latest
-            artifact_name: SpeciesDatabaseCmd_macos-x64_$tag.zip
-            asset_name: SpeciesDatabaseCmd_macos-x64_$tag
+            artifact_name: "SpeciesDatabaseCmd_macos-x64_${{  github.ref_name }}.zip"
+            asset_name: "SpeciesDatabaseCmd_macos-x64_${{  github.ref_name }}"
             os_identifier: macos-x64
 
     steps:
