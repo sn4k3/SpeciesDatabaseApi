@@ -120,7 +120,7 @@ public class TaxonConcept : IEquatable<TaxonConcept>
 	{
 		if (ReferenceEquals(null, other)) return false;
 		if (ReferenceEquals(this, other)) return true;
-		return Id == other.Id && FullName == other.FullName && AuthorYear == other.AuthorYear && Rank == other.Rank && NameStatus == other.NameStatus && UpdatedAt.Equals(other.UpdatedAt) && Active == other.Active && Synonyms.Equals(other.Synonyms) && HigherTaxa.Equals(other.HigherTaxa) && CommonNames.Equals(other.CommonNames) && CitesListings.Equals(other.CitesListings) && CitesListing == other.CitesListing && EuListings.Equals(other.EuListings) && EuListing == other.EuListing && AcceptedNames.Equals(other.AcceptedNames);
+		return Id == other.Id && FullName == other.FullName && AuthorYear == other.AuthorYear && Rank == other.Rank && NameStatus == other.NameStatus && UpdatedAt.Equals(other.UpdatedAt) && Active == other.Active && Synonyms.Equals(other.Synonyms) && Equals(HigherTaxa, other.HigherTaxa) && CommonNames.Equals(other.CommonNames) && CitesListings.Equals(other.CitesListings) && CitesListing == other.CitesListing && EuListings.Equals(other.EuListings) && EuListing == other.EuListing && AcceptedNames.Equals(other.AcceptedNames);
 	}
 
 	/// <inheritdoc />

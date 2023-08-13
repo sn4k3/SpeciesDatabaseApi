@@ -2,7 +2,7 @@
 
 ## 12/08/2023 - v1.1.0
 
-- Add Species+ (`SpeciesPlusClient`)
+- Add Species+/CITES (`SpeciesPlusClient`)
 - Move `Worms` to `MarineSpecies` namespace
 - Move `Mr` to `MarineRegions` namespace
 - Fix GET parameters with spaces between '&' making invalid urls
