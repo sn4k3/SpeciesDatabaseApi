@@ -34,7 +34,7 @@ jobs:
         run: dotnet nuget push SpeciesDatabaseApi*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_TOKEN} --skip-duplicate
 
   publish:
-    name: Publish for ${{ matrix.os_identifier }}
+    name: 🚀 Publish for ${{ matrix.os_identifier }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
