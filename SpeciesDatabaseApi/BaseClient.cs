@@ -560,10 +560,10 @@ public abstract class BaseClient : BindableBase, IDisposable
         var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         Debug.WriteLine(json);
         return JsonSerializer.Deserialize<T>(json, DefaultJsonSerializerOptions);
-#else
-        return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
 #endif
-    }
+
+		return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+	}
 
 #endregion
 }
