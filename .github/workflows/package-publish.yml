@@ -36,30 +36,34 @@ jobs:
   publish:
     name: Publish for ${{ matrix.os_identifier }}
     runs-on: ${{ matrix.os }}
-    env:
-      os_identifier: ${{ matrix.os_identifier }}
-      publish_folder: "SpeciesDatabaseCmd_$os_identifier_${{ github.ref_name }}"
-      artifact_name: "$publish_folder.zip"
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
             os_identifier: linux-x64
+            publish_folder: "SpeciesDatabaseCmd_linux-x64_${{ github.ref_name }}"
+            artifact_name: "SpeciesDatabaseCmd_linux-x64_${{ github.ref_name }}.zip"
 
           - os: windows-latest
             os_identifier: win-x64  
-            
+            publish_folder: "SpeciesDatabaseCmd_win-x64_${{ github.ref_name }}"
+            artifact_name: "SpeciesDatabaseCmd_win-x64_${{ github.ref_name }}.zip"
+
           - os: macos-latest
             os_identifier: osx-x64
+            publish_folder: "SpeciesDatabaseCmd_osx-x64_${{ github.ref_name }}"
+            artifact_name: "SpeciesDatabaseCmd_osx-x64_${{ github.ref_name }}.zip"
 
           - os: macos-latest
             os_identifier: osx-arm64
+            publish_folder: "SpeciesDatabaseCmd_osx-arm64_${{ github.ref_name }}"
+            artifact_name: "SpeciesDatabaseCmd_osx-arm64_${{ github.ref_name }}.zip"
             
     steps:
       - name: 🛒 Checkout
         uses: actions/checkout@v3
 
-      - name: Verify commit exists in origin/master
+      - name: 🔍 Verify commit exists in origin/master
         run: |
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
           git branch --remote --contains | grep origin/master
@@ -71,19 +75,19 @@ jobs:
 
       - name: 🔧 Build
         run: | 
-          dotnet publish SpeciesDatabaseCmd -o $publish_folder -c Release -r $os_identifier -p:PublishReadyToRun=true --self-contained
+          dotnet publish SpeciesDatabaseCmd -o ${{ matrix.publish_folder }} -c Release -r ${{ matrix.os_identifier }} -p:PublishReadyToRun=true --self-contained
 
       - name: 📦 Zip
         uses: vimtor/action-zip@v1
         with:
-         files: ${publish_folder}/
+         files: ${{ matrix.publish_folder }}/
          recursive: true
-         dest: ${artifact_name}
+         dest: ${{ matrix.artifact_name }}
 
       - name: 🚀 Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: $artifact_name
-          asset_name: $artifact_name
+          file: ${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
