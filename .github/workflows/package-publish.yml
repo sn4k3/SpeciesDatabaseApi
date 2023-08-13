@@ -79,12 +79,12 @@ jobs:
       - name: 📦 Zip
         working-directory: ./${{ matrix.asset_name }}
         run: | 
-          zip -rq "../${{ matrix.asset_name }}.zip" .
+          zip -rq "../${{ matrix.artifact_name }}" .
 
       - name: 🚀 Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
+          asset_name: ${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
