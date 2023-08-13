@@ -40,7 +40,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: "SpeciesDatabaseCmd_win-x64_${{  github.ref_name }}.zip"
+            artifact_name: "SpeciesDatabaseCmd_linux-x64_${{  github.ref_name }}.zip"
             asset_name: "SpeciesDatabaseCmd_linux-x64_${{  github.ref_name }}"
             os_identifier: linux-x64
 
