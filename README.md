@@ -25,7 +25,7 @@ Queries and fetch data from species, taxon, regions and conservation database(s)
 Before the use of any provider you must accept and follow the terms of use of each used client. 
 Please refer to the "terms of use" from the above links.  
 
-## Structure
+## 🧬 Structure
 
 - Calls follow the async programming
 - Returned data have a class data model
@@ -101,7 +101,7 @@ TaxonName: Great White Shark, Primary: False, Language: eng
 ```
 </details>
 
-## Command-line
+## 🗔 Command-line
 
 The project **[SpeciesDatabaseCmd](https://github.com/sn4k3/SpeciesDatabaseApi/tree/master/SpeciesDatabaseCmd)** allow to call all the API using the command-line and also provide a sample on how to use the library.  
 Run the "SpeciesDatabaseCmd.exe" and follow the in-terminal instructions to call the commands.
@@ -141,7 +141,7 @@ SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
 ```
 
 
-# Link package (Visual Studio)
+# 📦 Link package (Visual Studio)
 
 - Via "Manage NuGet packages"
 - Manually via terminal:
