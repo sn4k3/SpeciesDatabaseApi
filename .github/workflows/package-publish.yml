@@ -1,4 +1,4 @@
-name: Winget and Nuget package publish
+name: Nuget package publish and release
 
 on:
   release:
