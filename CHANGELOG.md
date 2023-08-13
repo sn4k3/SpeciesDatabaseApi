@@ -1,5 +1,12 @@
 # Change Log
 
+## 12/08/2023 - v1.1.0
+
+- Add Species+ (`SpeciesPlusClient`)
+- Move `Mr` to `MarineSpecies` namespace
+- Fix GET parameters with spaces between '&' making invalid urls
+- Improve some type names for coherence
+
 ## 12/08/2023 - v1.0.1
 
 - Add Marine Regions (`MrClient`)

@@ -1,6 +1,6 @@
 ﻿namespace SpeciesDatabaseApi.Iucn;
 
-public enum IuncGlobalClassification
+public enum GlobalClassificationEnum
 {
     /// <summary>
     /// Not evaluated
@@ -48,7 +48,7 @@ public enum IuncGlobalClassification
     EX,
 }
 
-public enum IuncQueryClassification
+public enum QueryClassificationEnum
 {
     /// <summary>
     /// Data deficient

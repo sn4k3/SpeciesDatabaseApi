@@ -48,17 +48,21 @@
       "commandName": "Project",
       "commandLineArgs": "IUCN SpecieCitationById 2467 europe"
     },
-    "MR GazetteerRecordsByName belgian": {
+    "MARINEREGIONS GazetteerRecordsByName belgian": {
       "commandName": "Project",
-      "commandLineArgs": "MR GazetteerRecordsByName belgian"
+      "commandLineArgs": "MARINEREGIONS GazetteerRecordsByName belgian"
     },
-    "MR GazetteerRecordsByNames belgian portugal spain": {
+    "MARINEREGIONS GazetteerRecordsByNames belgian portugal spain": {
       "commandName": "Project",
-      "commandLineArgs": "MR GazetteerRecordsByNames belgian portugal spain"
+      "commandLineArgs": "MARINEREGIONS GazetteerRecordsByNames belgian portugal spain"
     },
-    "MR Feed": {
+    "MARINEREGIONS Feed": {
       "commandName": "Project",
-      "commandLineArgs": "MR Feed"
+      "commandLineArgs": "MARINEREGIONS Feed"
+    },
+    "SPECIES+ TaxonConcepts carcharodon carcharias": {
+      "commandName": "Project",
+      "commandLineArgs": "SPECIES+ TaxonConcepts apikey \"carcharodon carcharias\" --with-descendants --with-eu-listings"
     }
   }
 }

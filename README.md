@@ -5,19 +5,22 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/sn4k3?color=red&style=for-the-badge)](https://github.com/sponsors/sn4k3)
 <!--[![Downloads](https://img.shields.io/github/downloads/sn4k3/SpeciesDatabaseApi/total?style=for-the-badge)](https://github.com/sn4k3/SpeciesDatabaseApi/releases)!-->
 
-# Species Database Api
 
-Queries and fetch data from species, taxon and conservation database(s) to retrieve information using the provider API.
 
-## Clients
+# <img src="https://raw.githubusercontent.com/sn4k3/SpeciesDatabaseApi/master/icon.png" width='64'> Species Database Api 
 
-| Acronym                                 | Name                                           | Class                                                                                                          | Terms of use                                                  |
-| --------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
-| [WoRMS](https://www.marinespecies.org)  | World Register of Marine Species               | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Worms/WormsClient.cs) | [Terms of use](https://www.marinespecies.org/about.php#terms) |
-| [IUCN](https://www.iucn.org)            | International Union for Conservation of Nature | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)    | [Terms of use](http://apiv3.iucnredlist.org/about) |
-| [MR](https://www.marineregions.org)     | Marine Regions                                 | [MrClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Mr/MrClient.cs)          | [Terms of use](https://www.marineregions.org/disclaimer.php) |
+Queries and fetch data from species, taxon, regions and conservation database(s) to retrieve information using the provider API.
 
-## Terms of use
+## üåê Clients
+
+| Name / Provider                                                           | Class                                                                                                                                  | Terms of use                                                  |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
+| [International Union for Conservation of Nature (IUCN)](https://iucn.org) | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)                            | [Terms of use](http://apiv3.iucnredlist.org/about) |
+| [Marine Regions](https://marineregions.org)                               | [MarineRegionsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineRegions/MarineRegionsClient.cs) | [Terms of use](https://marineregions.org/disclaimer.php) |
+| [Species+/CITES](https://speciesplus.net)                                 | [SpeciesPlusClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/SpeciesPlus/SpeciesPlusClient.cs)       | [Terms of use](https://speciesplus.net/terms-of-use) |
+| [World Register of Marine Species (WoRMS)](https://marinespecies.org)     | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineSpecies/WormsClient.cs)                 | [Terms of use](https://marinespecies.org/about.php#terms) |
+
+## ü§ù Terms of use
 
 Before the use of any provider you must accept and follow the terms of use of each used client. 
 Please refer to the "terms of use" from the above links.  
@@ -46,14 +49,14 @@ Please refer to the "terms of use" from the above links.
 AphiaId: 105792  
 Url: https://marinespecies.org/aphia.php?p=taxdetails&id=105792  
 ScientificName: Carcharhinus leucas  
-Authority: (M¸ller & Henle 1839)  
+Authority: (M√ºller & Henle 1839)  
 TaxonRankId: 220  
 Rank: Species  
 Status: accepted  
 UnacceptReason:  
 ValidAphiaID: 105792  
 ValidName: Carcharhinus leucas  
-ValidAuthority: (M¸ller & Henle 1839)  
+ValidAuthority: (M√ºller & Henle 1839)  
 ParentNameUsageId: 105719  
 Kingdom: Animalia  
 Phylum: Chordata  
@@ -61,7 +64,7 @@ Class: Elasmobranchii
 Order: Carcharhiniformes  
 Family: Carcharhinidae  
 Genus: Carcharhinus  
-Citation: Froese R. and D. Pauly. Editors. (2023). FishBase. Carcharhinus leucas (M¸ller & Henle 1839). Accessed through: World Register of Marine Species at: https://marinespecies.org/aphia.php?p=taxdetails&id=105792 on 2023-08-09  
+Citation: Froese R. and D. Pauly. Editors. (2023). FishBase. Carcharhinus leucas (M√ºller & Henle 1839). Accessed through: World Register of Marine Species at: https://marinespecies.org/aphia.php?p=taxdetails&id=105792 on 2023-08-09  
 lsId: urn:lsid:marinespecies.org:taxname:105792  
 IsMarine: 1  
 IsBrackish: 1  
@@ -114,9 +117,10 @@ Run the "SpeciesDatabaseCmd.exe" and follow the in-terminal instructions to call
 #   -?, -h, --help  Show help and usage information
 # 
 # Commands:
-#  WORMS  Query - World Register of Marine Species (https://marinespecies.org)
-#  IUCN   Query - International Union for Conservation of Nature (http://iucnredlist.org)
-#  MR     Query - Marine Regions (https://marineregions.org)
+#  WORMS          Query - World Register of Marine Species (https://marinespecies.org)
+#  IUCN           Query - International Union for Conservation of Nature (http://iucnredlist.org)
+#  MARINEREGIONS  Query - Marine Regions (https://marineregions.org)
+#  SPECIES+       Query - Species+/CITES (https://speciesplus.net)
 
 SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
 

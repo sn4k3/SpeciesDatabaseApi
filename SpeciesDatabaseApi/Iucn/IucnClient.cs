@@ -24,7 +24,7 @@ public class IucnClient : BaseClient
 
     #region Properties
     /// <inheritdoc />
-    public override int Version => 3;
+    public override decimal Version => 3;
 
     /// <inheritdoc />
     public override string ClientFullName => FullName;
@@ -184,7 +184,7 @@ public class IucnClient : BaseClient
     /// <param name="category">The category</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<SpeciesByCategory?> GetSpeciesByCategory(IuncQueryClassification category, CancellationToken token = default)
+    public Task<SpeciesByCategory?> GetSpeciesByCategory(QueryClassificationEnum category, CancellationToken token = default)
     {
         return GetJsonAsync<SpeciesByCategory>($"species/category/{category}", token);
     }

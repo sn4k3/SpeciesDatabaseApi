@@ -11,7 +11,7 @@ internal static class IucnCommand
     private static readonly Argument<string> SpecieNameArgument = new("specie-name", "The name of the specie.");
     private static readonly Argument<int> SpecieIdArgument = new("specie-id", "The id of the specie.");
     private static readonly Argument<string> RegionIdentifierArgument = new("region-id", () => "global", "The region identifier to search.");
-    private static readonly Argument<IuncQueryClassification> CategoryArgument = new("classification", "The classification to search.");
+    private static readonly Argument<QueryClassificationEnum> CategoryArgument = new("classification", "The classification to search.");
     private static readonly Argument<string> ComprehensiveGroupArgument = new("comprehensive-group", "The name of the comprehensive group.");
 
 

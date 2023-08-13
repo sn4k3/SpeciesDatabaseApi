@@ -1,5 +1,5 @@
 ﻿using System.CommandLine;
-using SpeciesDatabaseApi.Worms;
+using SpeciesDatabaseApi.MarineSpecies;
 
 namespace SpeciesDatabaseCmd;
 
@@ -15,7 +15,7 @@ internal static class WormsCommand
     private static readonly Argument<int> AphiaIdArgument = new("aphiaID", "The AphiaID to search for.");
     private static readonly Argument<int[]> AphiaIdsArgument = new("aphiaIDs", "The AphiaIDs to search for.");
     private static readonly Argument<string> ExternalIdArgument = new("id", "The external identifier to search for.");
-    private static readonly Argument<ExternalIdentifierType> ExternalIdentifierTypeArgument = new("type", "Type of external identifier to return.");
+    private static readonly Argument<ExternalIdentifierTypeEnum> ExternalIdentifierTypeArgument = new("type", "Type of external identifier to return.");
     private static readonly Argument<string> ScientificNameArgument = new("scientific-name", "Name to search for.");
     private static readonly Argument<string[]> ScientificNamesArgument = new("scientific-names", "Names to search for.");
 

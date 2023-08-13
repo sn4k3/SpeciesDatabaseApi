@@ -12,7 +12,8 @@ internal class Program
         {
             WormsCommand.CreateCommand(),
             IucnCommand.CreateCommand(),
-            MrCommand.CreateCommand()
+            MarineRegionsCommand.CreateCommand(),
+            SpeciesPlusCommand.CreateCommand()
         };
         
         try

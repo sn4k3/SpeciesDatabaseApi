@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,12 +21,12 @@ namespace SpeciesDatabaseApi;
 
 public abstract class BaseClient : BindableBase, IDisposable
 {
-	#region Constants
+    #region Constants
 
-	private static readonly Lazy<HttpClient> HttpClientShared = new(() =>
-	{
-		var httpClient = new HttpClient();
-		httpClient.DefaultRequestHeaders.Add("User-Agent", AboutLibrary.SoftwareWithVersion);
+    private static readonly Lazy<HttpClient> HttpClientShared = new(() =>
+    {
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("User-Agent", AboutLibrary.SoftwareWithVersion);
         return httpClient;
     });
 
@@ -71,7 +70,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     /// <summary>
     /// Gets the version of the used Api
     /// </summary>
-    public virtual int Version => 0;
+    public abstract decimal Version { get; }
 
     /// <summary>
     /// Gets or sets the Api address for the calls.
@@ -288,40 +287,40 @@ public abstract class BaseClient : BindableBase, IDisposable
         // Sort the parameters alphabetically to avoid http redirection.
         foreach (var item in parameters.OrderBy(x => x.Key))
         {
-	        string? value;
-	        switch (item.Value)
-	        {
-		        case null:
-			        continue;
-		        case IList list:
-			        if (list.Count == 0) continue;
+            string? value;
+            switch (item.Value)
+            {
+                case null:
+                    continue;
+                case IList list:
+                    if (list.Count == 0) continue;
 
-			        var items = new List<string>(list.Count);
-			        foreach (var obj in list)
-			        {
-				        if (obj is null) continue;
-				        value = obj.ToString()?.Trim().ToLowerInvariant();
+                    var items = new List<string>(list.Count);
+                    foreach (var obj in list)
+                    {
+                        if (obj is null) continue;
+                        value = obj.ToString()?.Trim().ToLowerInvariant();
                         if (string.IsNullOrWhiteSpace(value)) continue;
-						items.Add(value);
-			        }
-			        value = string.Join(',', items);
-			        break;
-		        case string str:
-			        value = str.Trim().ToLowerInvariant();
-			        if (string.IsNullOrWhiteSpace(value)) continue;
-			        break;
-				default:
-	                value = item.Value.ToString()?.Trim().ToLowerInvariant();
-	                if (string.IsNullOrWhiteSpace(value)) continue;
+                        items.Add(value);
+                    }
+                    value = string.Join(',', items);
+                    break;
+                case string str:
+                    value = str.Trim().ToLowerInvariant();
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+                    break;
+                default:
+                    value = item.Value.ToString()?.Trim().ToLowerInvariant();
+                    if (string.IsNullOrWhiteSpace(value)) continue;
                     break;
             }
 
-			builder.Append($"{(builder.Length == 0 ? "?" : " & ")}{UrlEncode(item.Key.ToLowerInvariant())}={UrlEncode(value)}");
+            builder.Append($"{(builder.Length == 0 ? "?" : "&")}{UrlEncode(item.Key.ToLowerInvariant())}={UrlEncode(value)}");
         }
 
         if (ApiToken is { CanUse: true, Placement: ApiTokenPlacement.Get })
         {
-            builder.Append($"{(builder.Length == 0 ? "?" : " & ")}{UrlEncode(ApiToken.Key)}={UrlEncode(ApiToken.Value)}");
+            builder.Append($"{(builder.Length == 0 ? "?" : "&")}{UrlEncode(ApiToken.Key)}={UrlEncode(ApiToken.Value)}");
         }
 
         return builder.ToString();
@@ -376,7 +375,7 @@ public abstract class BaseClient : BindableBase, IDisposable
         {
             request.Headers.UserAgent.Add(ProductInfoHeader);
         }
-
+         
         if (ApiToken.CanUse)
         {
             switch (ApiToken.Placement)
@@ -537,27 +536,33 @@ public abstract class BaseClient : BindableBase, IDisposable
             } while (RequestsHitLimit);
         }
 
-		using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-		Interlocked.Increment(ref _totalRequests);
+        Interlocked.Increment(ref _totalRequests);
 
-		if (ThrowExceptionIfRequestStatusCodeFails) response.EnsureSuccessStatusCode();
-		else if (!response.IsSuccessStatusCode) return default;
+        if (ThrowExceptionIfRequestStatusCodeFails) response.EnsureSuccessStatusCode();
+        else if (!response.IsSuccessStatusCode) return default;
 
-		switch (response.StatusCode)
-		{
-			case HttpStatusCode.NoContent:
-				return default;
-		}
+        switch (response.StatusCode)
+        {
+            case HttpStatusCode.NoContent:
+                return default;
+        }
 
-		if (_autoWaitForRequestLimit && _maximumRequestsPerSecond > 0)
-		{
-			Interlocked.Increment(ref _requestsInCurrentSecond);
-			_resetRequestsTimer.Start();
-		}
+        if (_autoWaitForRequestLimit && _maximumRequestsPerSecond > 0)
+        {
+            Interlocked.Increment(ref _requestsInCurrentSecond);
+            _resetRequestsTimer.Start();
+        }
 
-		return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
-	}
+#if DEBUG
+        var json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        Debug.WriteLine(json);
+        return JsonSerializer.Deserialize<T>(json, DefaultJsonSerializerOptions);
+#else
+        return await response.Content.ReadFromJsonAsync<T>(DefaultJsonSerializerOptions, cancellationToken).ConfigureAwait(false);
+#endif
+    }
 
-    #endregion
+#endregion
 }
