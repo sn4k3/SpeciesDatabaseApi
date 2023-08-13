@@ -38,8 +38,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       os_identifier: ${{ matrix.os_identifier }}
-      publish_folder: "SpeciesDatabaseCmd_${os_identifier}_${{ github.ref_name }}"
-      artifact_name: "${publish_folder}.zip"
+      publish_folder: "SpeciesDatabaseCmd_$os_identifier_${{ github.ref_name }}"
+      artifact_name: "$publish_folder.zip"
     strategy:
       matrix:
         include:
@@ -71,7 +71,7 @@ jobs:
 
       - name: 🔧 Build
         run: | 
-          dotnet publish SpeciesDatabaseCmd -o ${publish_folder} -c Release -r ${os_identifier} -p:PublishReadyToRun=true --self-contained
+          dotnet publish SpeciesDatabaseCmd -o $publish_folder -c Release -r $os_identifier -p:PublishReadyToRun=true --self-contained
 
       - name: 📦 Zip
         uses: vimtor/action-zip@v1
@@ -84,6 +84,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${artifact_name}
-          asset_name: ${artifact_name}
+          file: $artifact_name
+          asset_name: $artifact_name
           tag: ${{ github.ref }}
