@@ -77,8 +77,9 @@ jobs:
           dotnet publish SpeciesDatabaseCmd -o ${{ matrix.asset_name }} -c Release -r ${{ matrix.os_identifier }} -p:PublishReadyToRun=true --self-contained
 
       - name: 📦 Zip
+        working-directory: ./${{ matrix.asset_name }}
         run: | 
-          zip -rq ${{ matrix.asset_name }} .
+          zip -rq "../${{ matrix.asset_name }}.zip" .
 
       - name: 🚀 Upload binaries to release
         uses: svenstaro/upload-release-action@v2
