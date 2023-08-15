@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using SpeciesDatabaseApi.Extensions;
 
 namespace SpeciesDatabaseApi.BoldSystems;
 
 /// <summary>
-/// The client for https://iucn.org API
+/// The client for https://www.boldsystems.org API
 /// </summary>
 public class BoldSystemsClient : BaseClient
 {
