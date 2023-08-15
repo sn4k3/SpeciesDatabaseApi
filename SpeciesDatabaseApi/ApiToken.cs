@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace SpeciesDatabaseApi;
 
@@ -100,6 +102,27 @@ public class ApiToken
         Value = value;
         Placement = placement;
     }
+
+	/// <summary>
+	/// Try to inject this token into a <see cref="HttpRequestMessage"/> if configured and possible
+	/// </summary>
+	/// <param name="request">The <see cref="HttpRequestMessage"/> where it will try to inject the token</param>
+	/// <returns></returns>
+	public bool TryInject(HttpRequestMessage request)
+    {
+	    if (!CanUse) return false;
+	    switch (Placement)
+	    {
+		    case ApiTokenPlacement.Header:
+			    request.Headers.Add(Key, Value);
+			    return true;
+		    case ApiTokenPlacement.HeaderAuthorization:
+			    request.Headers.Authorization = new AuthenticationHeaderValue(Key, Value);
+			    return true;
+		    default:
+			    return false;
+	    }
+	}
 
     #endregion
 

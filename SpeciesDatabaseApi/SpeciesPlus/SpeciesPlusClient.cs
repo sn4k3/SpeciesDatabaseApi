@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using SpeciesDatabaseApi.Extensions;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SpeciesDatabaseApi.SpeciesPlus;
 

@@ -22,7 +22,7 @@ public class MarineRegionsClient : BaseClient
     /// <summary>
     /// The Api default address
     /// </summary>
-    public static readonly Uri DefaultApiAddress = new("https://marineregions.org/rest");
+    public static readonly Uri DefaultApiAddress = new("https://www.marineregions.org/rest");
     #endregion
 
     #region Properties

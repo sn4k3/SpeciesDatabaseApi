@@ -22,7 +22,7 @@ public class WormsClient : BaseClient
     /// <summary>
     /// The Api default address
     /// </summary>
-    public static readonly Uri DefaultApiAddress = new("https://marinespecies.org/rest");
+    public static readonly Uri DefaultApiAddress = new("https://www.marinespecies.org/rest");
     #endregion
 
     #region Properties
@@ -401,5 +401,30 @@ public class WormsClient : BaseClient
     {
         return GetJsonAsync<VernacularItem[]>($"AphiaVernacularsByAphiaID/{aphiaId}", token);
     }
-    #endregion
+	#endregion
+
+	#region Static Methods
+
+	/// <summary>
+	/// Gets the link for an aphia based on aphia name<br/>
+	/// (This assumes that you have no idea if the taxon exists, or you do not want to look up the AphiaID)
+	/// </summary>
+	/// <param name="aphiaName">The aphia name to look for</param>
+	/// <returns></returns>
+	public static string GetAphiaLink(string aphiaName)
+    {
+	    return $"https://www.marinespecies.org/aphia.php?p=taxlist&tName={EscapeDataString(aphiaName)}";
+    }
+
+	/// <summary>
+	/// Gets the link for an aphia based on aphiaId
+	/// </summary>
+	/// <param name="aphiaId">The aphiaId to look for</param>
+	/// <returns></returns>
+	public static string GetAphiaLink(int aphiaId)
+    {
+	    return $"https://www.marinespecies.org/aphia.php?p=taxdetails&id={aphiaId}";
+    }
+
+	#endregion
 }

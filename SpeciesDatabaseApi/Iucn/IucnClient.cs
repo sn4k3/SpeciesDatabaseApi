@@ -40,7 +40,7 @@ public class IucnClient : BaseClient
 
     #endregion
 
-    #region Attributes
+    #region Methods
     /// <summary>
     /// Check what version of the IUCN Red List is driving the API
     /// </summary>
@@ -614,29 +614,31 @@ public class IucnClient : BaseClient
         return GetJsonAsync<SpecieWeblink>($"weblink/{EscapeDataString(specieName)}", token);
     }
 
-    /// <summary>
-    /// Gets an link which will redirect to the selected specie by name
-    /// </summary>
-    /// <param name="specieName"></param>
-    /// <returns>Url</returns>
-    public string GetSpecieRedirectLink(string specieName)
-    {
-        return GetRawRequestUrl($"website/{EscapeDataString(specieName)}");
-    }
+	#endregion
 
-    /// <summary>
-    /// Gets an link which will redirect to the selected specie by taxonId and/or region
-    /// </summary>
-    /// <param name="taxonId">The taxonId of the specie</param>
-    /// <param name="regionIdentifier">The region identifier, use null or global for the global link</param>
-    /// <returns>Url</returns>
-    public string GetSpecieRedirectLink(int taxonId, string? regionIdentifier = null)
-    {
-        return string.IsNullOrWhiteSpace(regionIdentifier)
-            ? GetRawRequestUrl($"taxonredirect/{taxonId}")
-            : GetRawRequestUrl($"taxonredirect/{taxonId}/{EscapeDataString(regionIdentifier)}");
+	#region Static Methods
+	/// <summary>
+	/// Gets an link which will redirect to the selected specie by name
+	/// </summary>
+	/// <param name="specieName"></param>
+	/// <returns>Url</returns>
+	public static string GetSpecieRedirectLink(string specieName)
+	{
+		return $"{DefaultApiAddress}/website/{EscapeDataString(specieName)}";
+	}
 
-    }
+	/// <summary>
+	/// Gets an link which will redirect to the selected specie by taxonId and/or region
+	/// </summary>
+	/// <param name="taxonId">The taxonId of the specie</param>
+	/// <param name="regionIdentifier">The region identifier, use null or global for the global link</param>
+	/// <returns>Url</returns>
+	public static string GetSpecieRedirectLink(int taxonId, string? regionIdentifier = null)
+	{
+		return string.IsNullOrWhiteSpace(regionIdentifier)
+			? $"{DefaultApiAddress}/taxonredirect/{taxonId}"
+			: $"{DefaultApiAddress}/taxonredirect/{taxonId}/{EscapeDataString(regionIdentifier)}";
 
-    #endregion
+	}
+	#endregion
 }

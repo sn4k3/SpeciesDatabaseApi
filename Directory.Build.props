@@ -1,11 +1,12 @@
 <Project>
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-		<Authors>Tiago Conceição; sn4k3</Authors>
+		<Authors>Tiago Conceição (sn4k3)</Authors>
 		<Company>PTRTECH</Company>
 		<Copyright>Copyright 2023-$([System.DateTime]::Now.ToString(`yyyy`)) © PTRTECH</Copyright>
 		<Version>1.1.0</Version>
 		<Description>Queries and fetch data from species, taxon, regions and conservation database(s) to retrieve information using the provider API.</Description>
+		<ApplicationIcon>$(MSBuildThisFileDirectory)images/icon.ico</ApplicationIcon>
 
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -13,8 +14,8 @@
 		<PackageProjectUrl>https://github.com/sn4k3/SpeciesDatabaseApi</PackageProjectUrl>
 		<PackageReleaseNotes>https://github.com/sn4k3/SpeciesDatabaseApi/releases</PackageReleaseNotes>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageTags>species, taxomy, taxomony, biota, database, api, rest, world, register, marine, wrms, worms, iucn, mr, conservation, nature, regions</PackageTags>
+		<PackageIcon>icon-128.png</PackageIcon>
+		<PackageTags>species taxomy taxomony biota database api rest world register marine wrms worms iucn mr conservation nature regions bold systems</PackageTags>
 		<RepositoryType>Git</RepositoryType>
 		
 		<Nullable>enable</Nullable>
@@ -26,7 +27,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="" Visible="false"/>
+		<None Include="$(MSBuildThisFileDirectory)images/icon-128.png" Pack="true" PackagePath="" Visible="false"/>
 		<None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="" Visible="false"/>
 		<None Include="$(MSBuildThisFileDirectory)LICENSE.txt" Pack="true" PackagePath="" Visible="false"/>
 	</ItemGroup>

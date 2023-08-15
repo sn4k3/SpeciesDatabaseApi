@@ -7,18 +7,19 @@
 
 
 
-# <img src="https://raw.githubusercontent.com/sn4k3/SpeciesDatabaseApi/master/icon.png" width='64'> Species Database Api 
+# ![Icon](https://raw.githubusercontent.com/sn4k3/SpeciesDatabaseApi/master/images/icon-64.png) Species Database Api 
 
 Queries and fetch data from species, taxon, regions and conservation database(s) to retrieve information using the provider API.
 
 ## 🌐 Clients
 
-| Name / Provider                                                           | Class                                                                                                                                  | Terms of use                                                  |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
-| [International Union for Conservation of Nature (IUCN)](https://iucn.org) | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)                            | [Terms of use](http://apiv3.iucnredlist.org/about) |
-| [Marine Regions](https://marineregions.org)                               | [MarineRegionsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineRegions/MarineRegionsClient.cs) | [Terms of use](https://marineregions.org/disclaimer.php) |
-| [Species+/CITES](https://speciesplus.net)                                 | [SpeciesPlusClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/SpeciesPlus/SpeciesPlusClient.cs)       | [Terms of use](https://speciesplus.net/terms-of-use) |
-| [World Register of Marine Species (WoRMS)](https://marinespecies.org)     | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineSpecies/WormsClient.cs)                 | [Terms of use](https://marinespecies.org/about.php#terms) |
+| Name / Provider                                                               | Class                                                                                                                                  | Terms of use                                                  |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | 
+| [Barcode of Life Data Sytem (BoldSystems)](https://www.boldsystems.org)       | [BoldSystemsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/BoldSystems/BoldSystemsClient.cs)       | [Terms of use](https://www.boldsystems.org/index.php/Resources/whatIsBOLD) |
+| [International Union for Conservation of Nature (IUCN)](https://www.iucn.org) | [IucnClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/Iucn/IucnClient.cs)                            | [Terms of use](http://apiv3.iucnredlist.org/about) |
+| [Marine Regions](https://www.marineregions.org)                               | [MarineRegionsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineRegions/MarineRegionsClient.cs) | [Terms of use](https://www.marineregions.org/disclaimer.php) |
+| [Species+/CITES](https://www.speciesplus.net)                                 | [SpeciesPlusClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/SpeciesPlus/SpeciesPlusClient.cs)       | [Terms of use](https://www.speciesplus.net/terms-of-use) |
+| [World Register of Marine Species (WoRMS)](https://www.marinespecies.org)     | [WormsClient](https://github.com/sn4k3/SpeciesDatabaseApi/blob/master/SpeciesDatabaseApi/MarineSpecies/WormsClient.cs)                 | [Terms of use](https://www.marinespecies.org/about.php#terms) |
 
 ## 🤝 Terms of use
 
@@ -117,10 +118,11 @@ Run the "SpeciesDatabaseCmd.exe" and follow the in-terminal instructions to call
 #   -?, -h, --help  Show help and usage information
 # 
 # Commands:
-#  WORMS          Query - World Register of Marine Species (https://marinespecies.org)
-#  IUCN           Query - International Union for Conservation of Nature (http://iucnredlist.org)
-#  MARINEREGIONS  Query - Marine Regions (https://marineregions.org)
-#  SPECIES+       Query - Species+/CITES (https://speciesplus.net)
+#  BOLDSYSTEMS    Query - Barcode of Life Data Sytem (https://www.boldsystems.org)
+#  IUCN           Query - International Union for Conservation of Nature (http://www.iucnredlist.org)
+#  MARINEREGIONS  Query - Marine Regions (https://www.marineregions.org)
+#  SPECIES+       Query - Species+/CITES (https://www.speciesplus.net)
+#  WORMS          Query - World Register of Marine Species (https://www.marinespecies.org)
 
 SpeciesDatabaseCmd.exe IUCN SpecieCommonNames "Carcharodon carcharias"
 

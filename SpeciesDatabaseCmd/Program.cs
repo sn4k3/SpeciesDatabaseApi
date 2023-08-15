@@ -10,10 +10,11 @@ internal class Program
     {
         var rootCommand = new RootCommand("Query specific taxonomy and species database")
         {
-            WormsCommand.CreateCommand(),
+            BoldSystemsCommand.CreateCommand(),
             IucnCommand.CreateCommand(),
             MarineRegionsCommand.CreateCommand(),
-            SpeciesPlusCommand.CreateCommand()
+            SpeciesPlusCommand.CreateCommand(),
+            WormsCommand.CreateCommand(),
         };
         
         try
