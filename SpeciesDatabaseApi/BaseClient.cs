@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net.Mime;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -215,190 +210,39 @@ public abstract class BaseClient : BindableBase, IDisposable
     }
 
     /// <summary>
-    /// Encodes the data query to be safe in the url
-    /// </summary>
-    /// <param name="query">Query string to encode</param>
-    /// <returns>Encoded query string</returns>
-    public static string UrlEncode(string query)
-    {
-        return HttpUtility.UrlEncode(query);
-    }
-
-    /// <summary>
     /// Gets the raw absolute url for an request to the Api without any GET parameter
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
     public string GetRawRequestUrl(string path) => $"{ApiAddress}/{path.TrimStart(' ', '/').TrimEnd()}";
 
-    public string GetRequestUrl(string path)
+    /// <summary>
+    /// Gets the absolute url for an request to the Api
+    /// </summary>
+    /// <param name="path">Partial path without Api address</param>
+    /// <param name="parameters">Parameters to send with the request</param>
+    /// <returns>Absolute path for the request</returns>
+    public string GetRequestUrl(string path, QueryParameters? parameters = null)
     {
         var url = GetRawRequestUrl(path);
-        if (ApiToken is { CanUse: true, Placement: ApiTokenPlacement.Get })
+
+        if (parameters is null)
         {
-            return $"{url}?{EscapeDataString(ApiToken.Key)}={EscapeDataString(ApiToken.Value)}";
-        }
-
-        return url;
-    }
-
-    /// <summary>
-    /// Gets the absolute url for an request to the Api
-    /// </summary>
-    /// <param name="path">Partial path without Api address</param>
-    /// <param name="parameters">Parameters to send with the request</param>
-    /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, IEnumerable<KeyValuePair<string, object?>> parameters)
-    {
-        return $"{GetRawRequestUrl(path)}{GetUrlParametersString(parameters)}";
-    }
-
-    /// <summary>
-    /// Gets the absolute url for an request to the Api
-    /// </summary>
-    /// <param name="path">Partial path without Api address</param>
-    /// <param name="parameters">Parameters to send with the request</param>
-    /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, IReadOnlyDictionary<string, object?> parameters) => GetRequestUrl(path, parameters.AsEnumerable());
-
-    /// <summary>
-    /// Gets the absolute url for an request to the Api
-    /// </summary>
-    /// <param name="path">Partial path without Api address</param>
-    /// <param name="parameter">Parameter to send with the request</param>
-    /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, KeyValuePair<string, object?> parameter) => GetRequestUrl(path, new[] { parameter });
-
-    /// <summary>
-    /// Gets the absolute url for an request to the Api
-    /// </summary>
-    /// <param name="path">Partial path without Api address</param>
-    /// <param name="classObj">Class to parse the parameters from</param>
-    /// <returns>Absolute path for the request</returns>
-    public string GetRequestUrl(string path, object classObj)
-    {
-        return $"{GetRawRequestUrl(path)}{GetUrlParametersString(classObj)}";
-    }
-
-    /// <summary>
-    /// Gets the parameters string from a dictionary of key and values parameters
-    /// </summary>
-    /// <param name="parameters"></param>
-    /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(IEnumerable<KeyValuePair<string, object?>> parameters)
-    {
-        var builder = new StringBuilder();
-
-        // Sort the parameters alphabetically to avoid http redirection.
-        foreach (var item in parameters.OrderBy(x => x.Key))
-        {
-            string? value;
-            switch (item.Value)
+            if (ApiToken is { CanUse: true, Placement: ApiTokenPlacement.Get })
             {
-                case null:
-                    continue;
-                case IList list:
-                    if (list.Count == 0) continue;
-
-                    var items = new List<string>(list.Count);
-                    foreach (var obj in list)
-                    {
-                        if (obj is null) continue;
-                        value = obj.ToString()?.Trim();
-                        if (string.IsNullOrWhiteSpace(value)) continue;
-                        items.Add(value);
-                    }
-                    value = string.Join(',', items);
-                    break;
-                case Enum enumValue:
-                    if (enumValue.GetType().IsDefined(typeof(FlagsAttribute), false))
-                    {
-                        // Treat as list
-                        var enumList = Enum.GetValues(enumValue.GetType()).Cast<Enum>().Where(enumValue.HasFlag);
-                        value = string.Join(',', enumList);
-                    }
-                    else
-                    {
-                        // Treat as string
-                        value = enumValue.ToString();
-                    }
-                    break;
-                case bool boolValue:
-                    value = boolValue.ToString().ToLowerInvariant();
-                    break;
-                case string str:
-                    value = str.Trim();
-                    if (string.IsNullOrWhiteSpace(value)) continue;
-                    break;
-                default:
-                    value = item.Value.ToString()?.Trim();
-                    if (string.IsNullOrWhiteSpace(value)) continue;
-                    break;
+                return $"{url}?{EscapeDataString(ApiToken.Key)}={EscapeDataString(ApiToken.Value)}";
             }
 
-            builder.Append($"{(builder.Length == 0 ? "?" : "&")}{EscapeDataString(item.Key)}={EscapeDataString(value)}");
+            return url;
         }
 
-        if (ApiToken is { CanUse: true, Placement: ApiTokenPlacement.Get })
-        {
-            builder.Append($"{(builder.Length == 0 ? "?" : "&")}{EscapeDataString(ApiToken.Key)}={EscapeDataString(ApiToken.Value)}");
-        }
-
-        return builder.ToString();
+        return $"{url}{parameters.ToString(this)}";
     }
-
-    /// <summary>
-    /// Gets the parameters string from a dictionary of key and values parameters
-    /// </summary>
-    /// <param name="parameters"></param>
-    /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(IReadOnlyDictionary<string, object?> parameters) => GetUrlParametersString(parameters.AsEnumerable());
-
-    /// <summary>
-    /// Gets the parameters string from a dictionary of key and values parameters
-    /// </summary>
-    /// <param name="keyValue"></param>
-    /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(KeyValuePair<string, object?> keyValue) => GetUrlParametersString(new[]{ keyValue });
-
-    /// <summary>
-    /// Gets the parameters string from a class (Reflection)
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns>The formatted string</returns>
-    public string GetUrlParametersString(object? obj)
-    {
-        return GetUrlParametersString(GetDictionaryFromClassProperties(obj));
-    }
-
-    public Dictionary<string, object?> GetDictionaryFromClassProperties(object? obj)
-    {
-        var dict = new Dictionary<string, object?>();
-
-        if (obj is not null)
-        {
-            var properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var propertyInfo in properties)
-            {
-                var method = propertyInfo.GetMethod;
-                if (method is null) continue;
-                var value = propertyInfo.GetValue(obj);
-                if (value is null) continue;
-
-                var attr = propertyInfo.GetCustomAttribute<JsonPropertyNameAttribute>();
-                dict.Add(attr?.Name ?? method.Name, value);
-            }
-        }
-
-        return dict;
-    }
-    #endregion
 
     protected HttpRequestMessage CreateHttpRequestMessage(string requestUrl, HttpMethod httpMethod, RequestContentType contentType = RequestContentType.Json)
     {
         var request = new HttpRequestMessage(httpMethod, requestUrl);
-
+        
         switch (contentType)
         {
             case RequestContentType.Raw:
@@ -424,8 +268,10 @@ public abstract class BaseClient : BindableBase, IDisposable
         return request;
     }
 
+    #endregion
+
     #region Json Requests
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
 
@@ -435,36 +281,7 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
+    
     public Task<T?> PostJsonAsync<T>(string requestUrl, object postData, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl), HttpMethod.Post);
@@ -475,27 +292,9 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> GetJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> GetJsonAsync<T>(string requestUrl, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> GetJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> GetJsonAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Get);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> GetJsonAsync<T>(string requestUrl, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Get);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
@@ -505,27 +304,9 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> DeleteJsonAsync<T>(string requestUrl, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, cancellationToken);
-    }
-
-    public Task<T?> DeleteJsonAsync<T>(string requestUrl, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Delete);
         return SendRequestAsync<T>(request, cancellationToken);
     }
 
@@ -537,39 +318,9 @@ public abstract class BaseClient : BindableBase, IDisposable
     #endregion
 
     #region Xml Requests
-    public Task<T?> PostXmlAsync<T>(string requestUrl, object postData, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> PostXmlAsync<T>(string requestUrl, object postData, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> PostXmlAsync<T>(string requestUrl, object postData, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> PostXmlAsync<T>(string requestUrl, object postData, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Post);
-
-        var requestJson = JsonSerializer.Serialize(postData);
-        request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> PostXmlAsync<T>(string requestUrl, object postData, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Post);
 
         var requestJson = JsonSerializer.Serialize(postData);
         request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
@@ -587,27 +338,9 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
     }
 
-    public Task<T?> GetXmlAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> GetXmlAsync<T>(string requestUrl, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> GetXmlAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> GetXmlAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Get);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> GetXmlAsync<T>(string requestUrl, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Get);
         return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
     }
 
@@ -617,27 +350,9 @@ public abstract class BaseClient : BindableBase, IDisposable
         return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
     }
 
-    public Task<T?> DeleteXmlAsync<T>(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    public Task<T?> DeleteXmlAsync<T>(string requestUrl, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> DeleteXmlAsync<T>(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> DeleteXmlAsync<T>(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Delete);
-        return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
-    }
-
-    public Task<T?> DeleteXmlAsync<T>(string requestUrl, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Delete);
         return SendRequestAsync<T>(request, RequestContentType.Xml, cancellationToken);
     }
 
@@ -650,27 +365,9 @@ public abstract class BaseClient : BindableBase, IDisposable
 
     #region Download Requests
 
-    public Task DownloadAsync(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, Stream stream, CancellationToken cancellationToken = default)
+    public Task DownloadAsync(string requestUrl, QueryParameters urlParameters, Stream stream, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get, RequestContentType.Raw);
-        return SendDownloadRequestAsync(request, stream, cancellationToken);
-    }
-
-    public Task DownloadAsync(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, Stream stream, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get, RequestContentType.Raw);
-        return SendDownloadRequestAsync(request, stream, cancellationToken);
-    }
-
-    public Task DownloadAsync(string requestUrl, KeyValuePair<string, object?> urlParameter, Stream stream, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Get, RequestContentType.Raw);
-        return SendDownloadRequestAsync(request, stream, cancellationToken);
-    }
-
-    public Task DownloadAsync(string requestUrl, object classUrlParameters, Stream stream, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Get, RequestContentType.Raw);
         return SendDownloadRequestAsync(request, stream, cancellationToken);
     }
 
@@ -682,28 +379,10 @@ public abstract class BaseClient : BindableBase, IDisposable
 
     #endregion
 
-    #region 
-    public Task<HttpResponseMessage> GetResponseAsync(string requestUrl, IEnumerable<KeyValuePair<string, object?>> urlParameters, CancellationToken cancellationToken = default)
+    #region  Get Response
+    public Task<HttpResponseMessage> GetResponseAsync(string requestUrl, QueryParameters urlParameters, CancellationToken cancellationToken = default)
     {
         using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get, RequestContentType.Raw);
-        return SendRequestAsync(request, cancellationToken);
-    }
-
-    public Task<HttpResponseMessage> GetResponseAsync(string requestUrl, IReadOnlyDictionary<string, object?> urlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameters), HttpMethod.Get, RequestContentType.Raw);
-        return SendRequestAsync(request, cancellationToken);
-    }
-
-    public Task<HttpResponseMessage> GetResponseAsync(string requestUrl, KeyValuePair<string, object?> urlParameter, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, urlParameter), HttpMethod.Get, RequestContentType.Raw);
-        return SendRequestAsync(request, cancellationToken);
-    }
-
-    public Task<HttpResponseMessage> GetResponseAsync(string requestUrl, object classUrlParameters, CancellationToken cancellationToken = default)
-    {
-        using var request = CreateHttpRequestMessage(GetRequestUrl(requestUrl, classUrlParameters), HttpMethod.Get, RequestContentType.Raw);
         return SendRequestAsync(request, cancellationToken);
     }
 
@@ -714,6 +393,7 @@ public abstract class BaseClient : BindableBase, IDisposable
     }
     #endregion
 
+    #region Send Request
     /// <summary>
     /// Trigger before SendRequestAsync is executed.
     /// </summary>
@@ -845,6 +525,8 @@ public abstract class BaseClient : BindableBase, IDisposable
 
         return response.Content.CopyToAsync(stream, cancellationToken);
     }
+
+    #endregion
 
     #endregion
 }

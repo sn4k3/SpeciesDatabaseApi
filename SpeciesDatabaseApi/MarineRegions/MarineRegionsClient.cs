@@ -49,7 +49,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="mrgId">The MRGID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerRecord?> GetGazetteerRecord(int mrgId, CancellationToken token = default)
+    public Task<GazetteerRecord?> GetRecord(int mrgId, CancellationToken token = default)
     {
         return GetJsonAsync<GazetteerRecord>($"getGazetteerRecordByMRGID.json/{mrgId}/", token);
     }
@@ -60,7 +60,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="mrgId">The MRGID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<JsonNode?> GetFullGazetteerRecord(int mrgId, CancellationToken token = default)
+    public Task<JsonNode?> GetFullRecord(int mrgId, CancellationToken token = default)
     {
 	    return GetJsonAsync<JsonNode>($"getGazetteerRecordByMRGID.jsonld/{mrgId}/", token);
     }
@@ -71,7 +71,7 @@ public class MarineRegionsClient : BaseClient
 	/// <param name="mrgId">The MRGID to search for</param>
 	/// <param name="token"></param>
 	/// <returns></returns>
-	public Task<JsonNode?> GetGazetteerGeometries(int mrgId, CancellationToken token = default)
+	public Task<JsonNode?> GetGeometries(int mrgId, CancellationToken token = default)
     {
         return GetJsonAsync<JsonNode>($"getGazetteerGeometries.jsonld/{mrgId}/", token);
     }
@@ -81,7 +81,7 @@ public class MarineRegionsClient : BaseClient
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerType[]?> GetGazetteerTypes(CancellationToken token = default)
+    public Task<GazetteerType[]?> GetTypes(CancellationToken token = default)
     {
         return GetJsonAsync<GazetteerType[]>("getGazetteerTypes.json/", token);
     }
@@ -92,15 +92,15 @@ public class MarineRegionsClient : BaseClient
     /// <param name="name">The name to search for</param>
     /// <param name="like">Adds a '%'-sign before and after the GazetteerName (SQL LIKE function). Default=true</param>
     /// <param name="fuzzy">Uses Levenshtein query to find nearest matches. Default=false</param>
-    /// <param name="typeIds">One or more placetypeIDs. See <see cref="GetGazetteerTypes"/> to retrieve a list of placetypeIDs. Default=(empty)</param>
+    /// <param name="typeIds">One or more placetypeIDs. See <see cref="GetTypes"/> to retrieve a list of placetypeIDs. Default=(empty)</param>
     /// <param name="language">Language (ISO 639-1 code). Default=(empty)</param>
     /// <param name="offset">Start record number, in order to page through next batch of results. Default=0</param>
     /// <param name="count">Number of records to retrieve. Default=100; max=100</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerRecord[]?> GetGazetteerRecords(string name, bool like = true, bool fuzzy = false, IEnumerable<int>? typeIds = null, string? language = null, int offset = 0, int count = 100, CancellationToken token = default)
+    public Task<GazetteerRecord[]?> GetRecords(string name, bool like = true, bool fuzzy = false, IEnumerable<int>? typeIds = null, string? language = null, int offset = 0, int count = 100, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"like", like},
             {"fuzzy", fuzzy},
@@ -120,7 +120,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="fuzzy">Uses Levenshtein query to find nearest matches. Default=false</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<List<GazetteerRecord[]>?> GetGazetteerRecords(IEnumerable<string?> names, bool like = true, bool fuzzy = false, CancellationToken token = default)
+    public Task<List<GazetteerRecord[]>?> GetRecords(IEnumerable<string?> names, bool like = true, bool fuzzy = false, CancellationToken token = default)
     {
         var namesPath = new StringBuilder();
         foreach (var name in names)
@@ -147,7 +147,7 @@ public class MarineRegionsClient : BaseClient
 		// page=2023-07-31T15:00:00Z/2023-07-31T16:00:00Z
 		//      2023-07-11T22:05:53.8948950+01:00/2023-08-11T22:05:53.8962167+01:00
 		//      2023-07-11T21:06:43.0750477Z/2023-08-11T21:06:43.0763630Z
-		var parameters = new KeyValuePair<string, object?>("page", $"{startDateTime.ToUniversalTime():O}/{endDateTime.ToUniversalTime():O}");
+		var parameters = new QueryParameters("page", $"{startDateTime.ToUniversalTime():O}/{endDateTime.ToUniversalTime():O}");
 		return GetJsonAsync<JsonNode>("getFeed.jsonld", parameters, token);
     }
 
@@ -168,7 +168,7 @@ public class MarineRegionsClient : BaseClient
 	/// <param name="mrgId">The MRGID to search for</param>
 	/// <param name="token"></param>
 	/// <returns></returns>
-	public Task<GazetteerWms[]?> GetgetGazetteerWmSes(int mrgId, CancellationToken token = default)
+	public Task<GazetteerWms[]?> GetWmSes(int mrgId, CancellationToken token = default)
     {
         return GetJsonAsync<GazetteerWms[]>($"getGazetteerWMSes.json/{mrgId}/", token);
     }
@@ -181,9 +181,9 @@ public class MarineRegionsClient : BaseClient
     /// <param name="type"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerRecord[]?> GetGazetteerRelations(int mrgId, RelationDirection direction = RelationDirection.Upper, RelationType type = RelationType.PartOf, CancellationToken token = default)
+    public Task<GazetteerRecord[]?> GetRelations(int mrgId, RelationDirection direction = RelationDirection.Upper, RelationType type = RelationType.PartOf, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"direction", direction},
             {"type", type},
@@ -197,9 +197,9 @@ public class MarineRegionsClient : BaseClient
     /// <param name="offset">Provide offset to return next batch of 100 sources.</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerSource[]?> GetGazetteerSources(int offset = 0, CancellationToken token = default)
+    public Task<GazetteerSource[]?> GetSources(int offset = 0, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("offset", offset);
+        var parameters = new QueryParameters("offset", offset);
         return GetJsonAsync<GazetteerSource[]>("getGazetteerSources.json/", parameters, token);
     }
 
@@ -209,7 +209,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="sourceId"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerSourceName[]?> GetGazetteerSource(int sourceId, CancellationToken token = default)
+    public Task<GazetteerSourceName[]?> GetSource(int sourceId, CancellationToken token = default)
     {
         return GetJsonAsync<GazetteerSourceName[]>($"getGazetteerSourceBySourceID.json/{sourceId}/", token);
     }
@@ -220,7 +220,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="mrgId">The MRGID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<string[]?> GetGazetteerNames(int mrgId, CancellationToken token = default)
+    public Task<string[]?> GetNames(int mrgId, CancellationToken token = default)
     {
         return GetJsonAsync<string[]>($"getGazetteerNamesByMRGID.json/{mrgId}/", token);
     }
@@ -231,7 +231,7 @@ public class MarineRegionsClient : BaseClient
     /// <param name="sourceName">The source name to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerRecord[]?> GetGazetteerRecordsBySource(string sourceName, CancellationToken token = default)
+    public Task<GazetteerRecord[]?> GetRecordsBySource(string sourceName, CancellationToken token = default)
     {
         return GetJsonAsync<GazetteerRecord[]>($"getGazetteerRecordsBySource.json/{EscapeDataString(sourceName)}/", token);
     }
@@ -239,13 +239,13 @@ public class MarineRegionsClient : BaseClient
     /// <summary>
     /// Gets all records for the given type, per batch of 100
     /// </summary>
-    /// <param name="type">Use <see cref="GetGazetteerTypes"/> to view a complete list of types</param>
+    /// <param name="type">Use <see cref="GetTypes"/> to view a complete list of types</param>
     /// <param name="offset">Provide offset to return next batch of 100 records.</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<GazetteerRecord[]?> GetGazetteerRecordsByType(string type, int offset = 0, CancellationToken token = default)
+    public Task<GazetteerRecord[]?> GetRecordsByType(string type, int offset = 0, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("offset", offset);
+        var parameters = new QueryParameters("offset", offset);
         return GetJsonAsync<GazetteerRecord[]>($"getGazetteerRecordsByType.json/{EscapeDataString(type)}/", parameters, token);
     }
 
@@ -254,15 +254,15 @@ public class MarineRegionsClient : BaseClient
 	/// </summary>
 	/// <param name="longitude">A decimal number which ranges from -90 to 90</param>
 	/// <param name="latitude">A decimal number which ranges from -180 to +180</param>
-	/// <param name="typeIds">One or more placetypeIDs. See <see cref="GetGazetteerTypes"/> to retrieve a list of placetypeIDs. Default=(empty)</param>
+	/// <param name="typeIds">One or more placetypeIDs. See <see cref="GetTypes"/> to retrieve a list of placetypeIDs. Default=(empty)</param>
 	/// <param name="offset">Start record number, in order to page through next batch of results. Default=0</param>
 	/// <param name="token"></param>
 	/// <returns></returns>
-	public Task<GazetteerRecord[]?> GetGazetteerRecordsByLatLong(decimal latitude, decimal longitude, IEnumerable<int>? typeIds = null, int offset = 0, CancellationToken token = default)
+	public Task<GazetteerRecord[]?> GetRecordsByLatLong(decimal latitude, decimal longitude, IEnumerable<int>? typeIds = null, int offset = 0, CancellationToken token = default)
     {
         if (latitude is < -90 or > 90) throw new ArgumentOutOfRangeException(nameof(latitude), "Latitude must be between -90 and 90");
         if (longitude is < -180 or > 180) throw new ArgumentOutOfRangeException(nameof(longitude), "Longitude must be between -90 and 90");
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"typeID", typeIds},
             {"offset", offset},

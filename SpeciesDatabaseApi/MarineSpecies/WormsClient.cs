@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -50,9 +49,9 @@ public class WormsClient : BaseClient
     /// <param name="includeInherited">Include the tree of children. Default=true</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AttributeKey[]?> GetAphiaAttributeKeysById(int attributeId = 0, bool includeInherited = true, CancellationToken token = default)
+    public Task<AttributeKey[]?> GetAttributeKeys(int attributeId = 0, bool includeInherited = true, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("include_children", includeInherited);
+        var parameters = new QueryParameters("include_children", includeInherited);
         return GetJsonAsync<AttributeKey[]>($"AphiaAttributeKeysByID/{attributeId}", parameters, token);
     }
 
@@ -63,9 +62,9 @@ public class WormsClient : BaseClient
     /// <param name="includeInherited">Include attributes inherited from the taxon its parent(s). Default=false</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<Attribute[]?> GetAphiaAttributesByAphiaId(int aphiaId, bool includeInherited = false, CancellationToken token = default)
+    public Task<Attribute[]?> GetAttributes(int aphiaId, bool includeInherited = false, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("include_inherited", includeInherited);
+        var parameters = new QueryParameters("include_inherited", includeInherited);
         return GetJsonAsync<Attribute[]>($"AphiaAttributesByAphiaID/{aphiaId}", parameters, token);
     }
 
@@ -75,7 +74,7 @@ public class WormsClient : BaseClient
     /// <param name="categoryId">The CategoryID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AttributeValue[]?> GetAphiaAttributeValuesByCategoryId(int categoryId = 0, CancellationToken token = default)
+    public Task<AttributeValue[]?> GetAttributeValues(int categoryId = 0, CancellationToken token = default)
     {
         return GetJsonAsync<AttributeValue[]>($"AphiaAttributeValuesByCategoryID/{categoryId}", token);
     }
@@ -87,9 +86,9 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaAttributeSet[]?> GetAphiaIDsByAttributeKeyId(int attributeId, int offset = 1, CancellationToken token = default)
+    public Task<AphiaAttributeSet[]?> GetAphiaIdsAndAttributes(int attributeId, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("offset", offset);
+        var parameters = new QueryParameters("offset", offset);
         return GetJsonAsync<AphiaAttributeSet[]>($"AphiaIDsByAttributeKeyID/{attributeId}", parameters, token);
     }
     #endregion
@@ -101,7 +100,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<Distribution[]?> GetAphiaDistributionsByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<Distribution[]?> GetDistributions(int aphiaId, CancellationToken token = default)
     {
         return GetJsonAsync<Distribution[]>($"AphiaDistributionsByAphiaID/{aphiaId}", token);
     }
@@ -115,9 +114,9 @@ public class WormsClient : BaseClient
     /// <param name="type">Type of external identifier to return.</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<string[]?> GetAphiaExternalIdByAphiaId(int aphiaId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
+    public Task<string[]?> GetExternalId(int aphiaId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("type", type);
+        var parameters = new QueryParameters("type", type);
         return GetJsonAsync<string[]>($"AphiaExternalIDByAphiaID/{aphiaId}", parameters, token);
     }
 
@@ -128,9 +127,9 @@ public class WormsClient : BaseClient
     /// <param name="type">Type of external identifier to return.</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord?> GetAphiaRecordByExternalId(string externalId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
+    public Task<AphiaRecord?> GetRecordByExternalId(string externalId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("type", type);
+        var parameters = new QueryParameters("type", type);
         return GetJsonAsync<AphiaRecord>($"AphiaRecordByExternalID/{externalId}", parameters, token);
     }
     #endregion
@@ -142,7 +141,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<Source[]?> GetAphiaSourcesByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<Source[]?> GetSources(int aphiaId, CancellationToken token = default)
     {
         return GetJsonAsync<Source[]>($"AphiaSourcesByAphiaID/{aphiaId}", token);
     }
@@ -158,9 +157,9 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaChildrenByAphiaId(int aphiaId, bool marineOnly = true, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetChildren(int aphiaId, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"marine_only", marineOnly},
             {"offset", offset},
@@ -174,7 +173,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<Classification?> GetAphiaClassificationByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<Classification?> GetClassification(int aphiaId, CancellationToken token = default)
     {
         return GetJsonAsync<Classification>($"AphiaClassificationByAphiaID/{aphiaId}", token);
     }
@@ -186,9 +185,9 @@ public class WormsClient : BaseClient
     /// <param name="marineOnly">Limit to marine taxa. Default=true</param>
     /// <param name="token"></param>
     /// <returns>NULL when no match is found; -999 when multiple matches are found; an integer(AphiaID) when one exact match was found</returns>
-    public Task<int?> GetAphiaIdByName(string scientificName, bool marineOnly = true, CancellationToken token = default)
+    public Task<int?> GetAphiaId(string scientificName, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("marine_only", marineOnly);
+        var parameters = new QueryParameters("marine_only", marineOnly);
         return GetJsonAsync<int?>($"AphiaIDByName/{Uri.EscapeDataString(scientificName)}", parameters, token);
     }
 
@@ -198,7 +197,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<string?> GetAphiaNameByAphiaId(int aphiaId,  CancellationToken token = default)
+    public Task<string?> GetAphiaName(int aphiaId,  CancellationToken token = default)
     {
         return GetJsonAsync<string>($"AphiaNameByAphiaID/{aphiaId}", token);
     }
@@ -209,7 +208,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord?> GetAphiaRecordByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<AphiaRecord?> GetRecord(int aphiaId, CancellationToken token = default)
     {
         return GetJsonAsync<AphiaRecord>($"AphiaRecordByAphiaID/{aphiaId}", token);
     }
@@ -221,7 +220,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<JsonNode?> GetAphiaRecordFullByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<JsonNode?> GetFullRecord(int aphiaId, CancellationToken token = default)
     {
         // TODO: Implement this with DTO
         return GetJsonAsync<JsonNode>($"AphiaRecordFullByAphiaID/{aphiaId}", token);
@@ -233,9 +232,9 @@ public class WormsClient : BaseClient
     /// <param name="aphiaIds">The AphiaIDs to search for</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaRecordsByAphiaIds(IEnumerable<int> aphiaIds, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetRecords(IEnumerable<int> aphiaIds, CancellationToken token = default)
     {
-        var parameters = aphiaIds.Select(aphiaId => new KeyValuePair<string, object?>("aphiaids[]", aphiaId));
+        var parameters = new QueryParameters("aphiaids[]", aphiaIds);
         return GetJsonAsync<AphiaRecord[]>("AphiaRecordsByAphiaIDs", parameters, token);
     }
 
@@ -248,9 +247,9 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaRecordsByDate(DateTime startDate, DateTime endDate, bool marineOnly = true, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetRecords(DateTime startDate, DateTime endDate, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"startdate", startDate.ToString("O")},
             {"enddate", endDate.ToString("O")},
@@ -269,10 +268,13 @@ public class WormsClient : BaseClient
     /// <param name="marineOnly">Limit to marine taxa. Default=true</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<List<AphiaRecord[]>?> GetAphiaRecordsByMatchNames(IEnumerable<string> scientificNames, bool marineOnly = true, CancellationToken token = default)
+    public Task<List<AphiaRecord[]>?> GetRecordsFuzzy(IEnumerable<string> scientificNames, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object?>("scientificnames[]", aphiaId)).ToList();
-        parameters.Add(new ("marine_only", marineOnly));
+        var parameters = new QueryParameters
+        {
+            {"scientificnames[]", scientificNames},
+            {"marine_only", marineOnly}
+        };
         return GetJsonAsync<List<AphiaRecord[]>>("AphiaRecordsByMatchNames", parameters, token);
     }
 
@@ -285,15 +287,15 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaRecordsByName(string scientificName, bool like = true, bool marineOnly = true, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetRecords(string scientificName, bool like = true, bool marineOnly = true, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"like", like},
             {"marine_only", marineOnly},
             {"offset", offset},
         };
-        return GetJsonAsync<AphiaRecord[]>($"AphiaRecordsByName/{Uri.EscapeDataString(scientificName)}", parameters, token);
+        return GetJsonAsync<AphiaRecord[]>($"AphiaRecordsByName/{EscapeDataString(scientificName)}", parameters, token);
     }
 
     /// <summary>
@@ -306,11 +308,15 @@ public class WormsClient : BaseClient
     /// <param name="marineOnly">Limit to marine taxa. Default=true</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<List<AphiaRecord[]>?> GetAphiaRecordsByNames(IEnumerable<string> scientificNames, bool like = false, bool marineOnly = true, CancellationToken token = default)
+    public Task<List<AphiaRecord[]>?> GetRecords(IEnumerable<string> scientificNames, bool like = false, bool marineOnly = true, CancellationToken token = default)
     {
-        var parameters = scientificNames.Select(aphiaId => new KeyValuePair<string, object?>("scientificnames[]", aphiaId)).ToList();
-        parameters.Add(new ("like", like));
-        parameters.Add(new ("marine_only", marineOnly));
+        var parameters = new QueryParameters
+        {
+            {"scientificnames[]", scientificNames},
+            {"like", like},
+            {"marine_only", marineOnly}
+        };
+            
         return GetJsonAsync<List<AphiaRecord[]>>("AphiaRecordsByNames", parameters, token);
     }
 
@@ -322,9 +328,9 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaRecordsByTaxonRankId(int taxonId, int belongsToAphiaId, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetRecords(int taxonId, int? belongsToAphiaId, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"belongsTo", belongsToAphiaId},
             {"offset", offset},
@@ -339,10 +345,10 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records. Default=1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRecord[]?> GetAphiaSynonymsByAphiaId(int aphiaId, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetSynonyms(int aphiaId, int offset = 1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object?>("offset", offset);
-        return GetJsonAsync<AphiaRecord[]>($"AphiaSynonymsByAphiaID/{aphiaId}", parameter, token);
+        var parameters = new QueryParameters("offset", offset);
+        return GetJsonAsync<AphiaRecord[]>($"AphiaSynonymsByAphiaID/{aphiaId}", parameters, token);
     }
 
     /// <summary>
@@ -352,10 +358,10 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID of the kingdom. Default=-1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRank[]?> GetAphiaTaxonRanksById(int taxonId = -1, int aphiaId = -1, CancellationToken token = default)
+    public Task<AphiaRank[]?> GetTaxonRanks(int taxonId = -1, int aphiaId = -1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object?>("AphiaID", aphiaId);
-        return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByID/{taxonId}", parameter, token);
+        var parameters = new QueryParameters("AphiaID", aphiaId);
+        return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByID/{taxonId}", parameters, token);
     }
 
     /// <summary>
@@ -365,10 +371,10 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID of the kingdom. Default=-1</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<AphiaRank[]?> GetAphiaTaxonRanksByName(string taxonRank = "", int aphiaId = -1, CancellationToken token = default)
+    public Task<AphiaRank[]?> GetTaxonRanks(string taxonRank = "", int aphiaId = -1, CancellationToken token = default)
     {
-        var parameter = new KeyValuePair<string, object?>("AphiaID", aphiaId);
-        return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByName/{Uri.EscapeDataString(taxonRank)}", parameter, token);
+        var parameters = new QueryParameters("AphiaID", aphiaId);
+        return GetJsonAsync<AphiaRank[]>($"AphiaTaxonRanksByName/{Uri.EscapeDataString(taxonRank)}", parameters, token);
     }
     #endregion
 
@@ -381,9 +387,9 @@ public class WormsClient : BaseClient
     /// <param name="offset">Starting record number, when retrieving next chunk of (50) records</param>
     /// <param name="token"></param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public Task<AphiaRecord[]?> GetAphiaRecordsByVernacular(string vernacular, bool like = false, int offset = 1, CancellationToken token = default)
+    public Task<AphiaRecord[]?> GetRecordsByVernacular(string vernacular, bool like = false, int offset = 1, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {nameof(like), like},
             {nameof(offset), offset},
@@ -397,7 +403,7 @@ public class WormsClient : BaseClient
     /// <param name="aphiaId">The AphiaID to search for</param>
     /// <param name="token"></param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public Task<VernacularItem[]?> GetAphiaVernacularsByAphiaId(int aphiaId, CancellationToken token = default)
+    public Task<VernacularItem[]?> GetVernaculars(int aphiaId, CancellationToken token = default)
     {
         return GetJsonAsync<VernacularItem[]>($"AphiaVernacularsByAphiaID/{aphiaId}", token);
     }

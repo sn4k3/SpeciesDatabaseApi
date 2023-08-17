@@ -57,7 +57,7 @@ public class SpeciesPlusClient : BaseClient
     /// <returns></returns>
     public Task<CitesLegislation?> GetCitesLegislation(int taxonConceptId, ScopeEnum scope = ScopeEnum.Current, string language = "en", CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"scope", StringExtensions.PrependSpaceByUpperChar(scope.ToString())},
             {"language", language}
@@ -75,7 +75,7 @@ public class SpeciesPlusClient : BaseClient
     /// <returns></returns>
     public Task<EuLegislation?> GetEuLegislation(int taxonConceptId, ScopeEnum scope = ScopeEnum.Current, string language = "en", CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"scope", StringExtensions.PrependSpaceByUpperChar(scope.ToString())},
             {"language", language}
@@ -92,7 +92,7 @@ public class SpeciesPlusClient : BaseClient
     /// <returns></returns>
     public Task<Distribution[]?> GetDistributions(int taxonConceptId, string language = "en", CancellationToken token = default)
     {
-        var parameters = new KeyValuePair<string, object?>("language", language);
+        var parameters = new QueryParameters("language", language);
         return GetJsonAsync<Distribution[]>($"taxon_concepts/{taxonConceptId}/distributions", parameters, token);
     }
 
@@ -123,7 +123,7 @@ public class SpeciesPlusClient : BaseClient
 	public Task<TaxonConcepts?> GetTaxonConcepts(string? name = null, TaxomonyEnum taxonomy = TaxomonyEnum.CITES, bool withDescendants = false, bool withEuListings = false, 
 		DateTime? updatedSince = null, string language = "en", int page = 1, int perPage = 500,  CancellationToken token = default)
 	{
-		var parameters = new Dictionary<string, object?>
+		var parameters = new QueryParameters
 		{
 			{"name", name},
 			{"taxonomy", taxonomy},

@@ -9,7 +9,7 @@ internal static class WormsCommand
 
 
     private static readonly Argument<int> AttributeIdArgument = new("attributeID", "The attribute definition id to search for.");
-    private static readonly Argument<int> categoryIdArgument = new("categoryId", "The categoryId to search for.");
+    private static readonly Argument<int> CategoryIdArgument = new("categoryId", "The categoryId to search for.");
 
 
     private static readonly Argument<int> AphiaIdArgument = new("aphiaID", "The AphiaID to search for.");
@@ -36,48 +36,48 @@ internal static class WormsCommand
         var command = new Command(Client.ClientAcronym.ToUpper(), Program.GetRootCommandDescription(Client))
         {
             //Attributes
-            AphiaAttributeKeysByIdCommand(),
-            AphiaAttributesByAphiaIdCommand(),
-            AphiaAttributeValuesByCategoryIdCommand(),
-            AphiaIDsByAttributeKeyIdCommand(),
+            AttributeKeysByIdCommand(),
+            AttributesCommand(),
+            AttributeValuesCommand(),
+            AphiaIdsAndAttributesCommand(),
 
             // Distributions
-            AphiaDistributionsByAphiaIdCommand(),
+            DistributionsCommand(),
 
             // External Identifiers
-            AphiaExternalIdByAphiaIdCommand(),
-            AphiaRecordByExternalIdCommand(),
+            ExternalIdCommand(),
+            RecordByExternalIdCommand(),
 
             // Sources
-            AphiaSourcesByAphiaIdCommand(),
+            SourcesCommand(),
 
             // Taxonomic data
-            AphiaChildrenByAphiaIdCommand(),
-            AphiaClassificationByAphiaIdCommand(),
-            AphiaIdByNameCommand(),
-            AphiaNameByAphiaIdCommand(),
-            AphiaRecordByAphiaIdCommand(),
-            AphiaRecordFullByAphiaIdCommand(),
-            AphiaRecordsByAphiaIdsCommand(),
-            AphiaRecordsByDateCommand(),
-            AphiaRecordsByMatchNamesCommand(),
-            AphiaRecordsByNameCommand(),
-            AphiaRecordsByNamesCommand(),
-            AphiaRecordsByTaxonRankIdCommand(),
-            AphiaSynonymsByAphiaIdCommand(),
-            AphiaTaxonRanksByIdCommand(),
-            AphiaTaxonRanksByNameCommand(),
+            ChildrenCommand(),
+            ClassificationCommand(),
+            AphiaIdCommand(),
+            AphiaNameCommand(),
+            RecordByAphiaIdCommand(),
+            FullRecordCommand(),
+            RecordsByAphiaIdsCommand(),
+            RecordsByDateCommand(),
+            RecordsByMatchNamesCommand(),
+            RecordsByNameCommand(),
+            RecordsByNamesCommand(),
+            RecordsByTaxonRankIdCommand(),
+            SynonymsCommand(),
+            TaxonRanksByIdCommand(),
+            TaxonRanksByNameCommand(),
 
             // Vernaculars
-            AphiaRecordsByVernacularCommand(),
-            AphiaVernacularsByAphiaIdCommand(),
+            RecordsByVernacularCommand(),
+            VernacularsCommand(),
         };
         return command;
     }
 
-    private static Command AphiaAttributeKeysByIdCommand()
+    private static Command AttributeKeysByIdCommand()
     {
-        var command = new Command("AphiaAttributeKeysByID", "Get attribute definitions. To refer to root items specify ID = '0'.")
+        var command = new Command("AttributeKeysByID", "Get attribute definitions. To refer to root items specify ID = '0'.")
         {
             AttributeIdArgument,
             IncludeChildrenOption
@@ -85,16 +85,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (attributeId, includeChildren) =>
         {
-            var result = await Client.GetAphiaAttributeKeysById(attributeId, includeChildren);
+            var result = await Client.GetAttributeKeys(attributeId, includeChildren);
             Program.Print(result);
         }, AttributeIdArgument, IncludeChildrenOption);
 
         return command;
     }
 
-    private static Command AphiaAttributesByAphiaIdCommand()
+    private static Command AttributesCommand()
     {
-        var command = new Command("AphiaAttributesByAphiaID", "Get a list of attributes for a given AphiaID.")
+        var command = new Command("Attributes", "Get a list of attributes for a given AphiaID.")
         {
             AphiaIdArgument,
             IncludeInheritedOption
@@ -102,32 +102,32 @@ internal static class WormsCommand
 
         command.SetHandler(async (aphiaId, includeInherited) =>
         {
-            var result = await Client.GetAphiaAttributesByAphiaId(aphiaId, includeInherited);
+            var result = await Client.GetAttributes(aphiaId, includeInherited);
             Program.Print(result);
         }, AphiaIdArgument, IncludeInheritedOption);
 
         return command;
     }
 
-    private static Command AphiaAttributeValuesByCategoryIdCommand()
+    private static Command AttributeValuesCommand()
     {
-        var command = new Command("AphiaAttributeValuesByCategoryID", "Get list values that are grouped by an CategoryID.")
+        var command = new Command("AttributeValues", "Get list values that are grouped by an CategoryID.")
         {
-            categoryIdArgument,
+            CategoryIdArgument,
         };
 
         command.SetHandler(async (categoryId) =>
         {
-            var result = await Client.GetAphiaAttributeValuesByCategoryId(categoryId);
+            var result = await Client.GetAttributeValues(categoryId);
             Program.Print(result);
-        }, categoryIdArgument);
+        }, CategoryIdArgument);
 
         return command;
     }
 
-    private static Command AphiaIDsByAttributeKeyIdCommand()
+    private static Command AphiaIdsAndAttributesCommand()
     {
-        var command = new Command("AphiaIDsByAttributeKeyID", "Get a list of AphiaIDs (max 50) with attribute tree for a given attribute definition ID.")
+        var command = new Command("AphiaIdsAndAttributes", "Get a list of AphiaIDs (max 50) with attribute tree for a given attribute definition ID.")
         {
             AttributeIdArgument,
             OffsetOption
@@ -135,16 +135,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (attributeId, offset) =>
         {
-            var result = await Client.GetAphiaIDsByAttributeKeyId(attributeId, offset);
+            var result = await Client.GetAphiaIdsAndAttributes(attributeId, offset);
             Program.Print(result);
         }, AttributeIdArgument, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaDistributionsByAphiaIdCommand()
+    private static Command DistributionsCommand()
     {
-        var command = new Command("AphiaDistributionsByAphiaID", "Get all distributions for a given AphiaID.")
+        var command = new Command("Distributions", "Get all distributions for a given AphiaID.")
         {
             AphiaIdArgument,
             IncludeInheritedOption
@@ -152,16 +152,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaDistributionsByAphiaId(aphiaId);
+            var result = await Client.GetDistributions(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaExternalIdByAphiaIdCommand()
+    private static Command ExternalIdCommand()
     {
-        var command = new Command("AphiaExternalIDByAphiaID", "Get any external identifier(s) for a given AphiaID")
+        var command = new Command("ExternalId", "Get any external identifier(s) for a given AphiaID")
         {
             AphiaIdArgument,
             ExternalIdentifierTypeArgument
@@ -169,16 +169,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (aphiaId, type) =>
         {
-            var result = await Client.GetAphiaExternalIdByAphiaId(aphiaId, type);
+            var result = await Client.GetExternalId(aphiaId, type);
             Program.Print(result);
         }, AphiaIdArgument, ExternalIdentifierTypeArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordByExternalIdCommand()
+    private static Command RecordByExternalIdCommand()
     {
-        var command = new Command("AphiaRecordByExternalID", "Get the Aphia Record for a given external identifier")
+        var command = new Command("RecordByExternalID", "Get the Aphia Record for a given external identifier")
         {
             ExternalIdArgument,
             ExternalIdentifierTypeArgument
@@ -186,32 +186,32 @@ internal static class WormsCommand
 
         command.SetHandler(async (externalId, type) =>
         {
-            var result = await Client.GetAphiaRecordByExternalId(externalId, type);
+            var result = await Client.GetRecordByExternalId(externalId, type);
             Program.Print(result);
         }, ExternalIdArgument, ExternalIdentifierTypeArgument);
 
         return command;
     }
 
-    private static Command AphiaSourcesByAphiaIdCommand()
+    private static Command SourcesCommand()
     {
-        var command = new Command("AphiaSourcesByAphiaID", "Get one or more sources/references including links, for one AphiaID")
+        var command = new Command("Sources", "Get one or more sources/references including links, for one AphiaID")
         {
             AphiaIdArgument
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaSourcesByAphiaId(aphiaId);
+            var result = await Client.GetSources(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaChildrenByAphiaIdCommand()
+    private static Command ChildrenCommand()
     {
-        var command = new Command("AphiaChildrenByAphiaID", "Get the direct children (max. 50) for a given AphiaID.")
+        var command = new Command("Children", "Get the direct children (max. 50) for a given AphiaID.")
         {
             AphiaIdArgument,
             MarineOnlyOption, 
@@ -220,115 +220,115 @@ internal static class WormsCommand
 
         command.SetHandler(async (aphiaId, marineOnly, offset) =>
         {
-            var result = await Client.GetAphiaChildrenByAphiaId(aphiaId, marineOnly, offset);
+            var result = await Client.GetChildren(aphiaId, marineOnly, offset);
             Program.Print(result);
         }, AphiaIdArgument, MarineOnlyOption, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaClassificationByAphiaIdCommand()
+    private static Command ClassificationCommand()
     {
-        var command = new Command("AphiaClassificationByAphiaID", "Get the complete classification for one taxon. This also includes any sub or super ranks.")
+        var command = new Command("Classification", "Get the complete classification for one taxon. This also includes any sub or super ranks.")
         {
             AphiaIdArgument,
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaClassificationByAphiaId(aphiaId);
+            var result = await Client.GetClassification(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
         
         return command;
     }
 
-    private static Command AphiaIdByNameCommand()
+    private static Command AphiaIdCommand()
     {
-        var command = new Command("AphiaIDByName", "Get the AphiaID for a given name.")
+        var command = new Command("AphiaId", "Get the AphiaID for a given name.")
         {
             ScientificNameArgument,
         };
 
         command.SetHandler(async (scientificName) =>
         {
-            var result = await Client.GetAphiaIdByName(scientificName);
+            var result = await Client.GetAphiaId(scientificName);
             Program.Print(result);
         }, ScientificNameArgument);
 
         return command;
     }
 
-    private static Command AphiaNameByAphiaIdCommand()
+    private static Command AphiaNameCommand()
     {
-        var command = new Command("AphiaNameByAphiaID", "Get the name for a given AphiaID.")
+        var command = new Command("AphiaName", "Get the name for a given AphiaID.")
         {
             AphiaIdArgument,
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaNameByAphiaId(aphiaId);
+            var result = await Client.GetAphiaName(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordByAphiaIdCommand()
+    private static Command RecordByAphiaIdCommand()
     {
-        var command = new Command("AphiaRecordByAphiaID", "Get the complete AphiaRecord for a given AphiaID.")
+        var command = new Command("RecordByAphiaID", "Get the complete AphiaRecord for a given AphiaID.")
         {
             AphiaIdArgument,
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaRecordByAphiaId(aphiaId);
+            var result = await Client.GetRecord(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordFullByAphiaIdCommand()
+    private static Command FullRecordCommand()
     {
-        var command = new Command("AphiaRecordFullByAphiaID", "Returns the linked open data implementation of an AphiaRecord for a given AphiaID.")
+        var command = new Command("FullRecord", "Returns the linked open data implementation of an AphiaRecord for a given AphiaID.")
         {
             AphiaIdArgument,
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaRecordFullByAphiaId(aphiaId);
+            var result = await Client.GetFullRecord(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordsByAphiaIdsCommand()
+    private static Command RecordsByAphiaIdsCommand()
     {
-        var command = new Command("AphiaRecordsByAphiaIDs", "Get an AphiaRecord for multiple AphiaIDs in one go (max: 50).")
+        var command = new Command("RecordsByAphiaIDs", "Get an AphiaRecord for multiple AphiaIDs in one go (max: 50).")
         {
             AphiaIdsArgument,
         };
 
         command.SetHandler(async (aphiaIds) =>
         {
-            var result = await Client.GetAphiaRecordsByAphiaIds(aphiaIds);
+            var result = await Client.GetRecords(aphiaIds);
             Program.Print(result);
         }, AphiaIdsArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordsByDateCommand()
+    private static Command RecordsByDateCommand()
     {
         var startDateArgument = new Argument<DateTime>("startDate", "ISO 8601 formatted start date(time). i.e. 2023-08-08T15:59:31+00:00");
         var endDateArgument = new Argument<DateTime>("endDate", "ISO 8601 formatted end date(time). i.e. 2023-08-08T15:59:31+00:00");
 
-        var command = new Command("AphiaRecordsByDate", "Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period.")
+        var command = new Command("RecordsByDate", "Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period.")
         {
             startDateArgument,
             endDateArgument,
@@ -338,16 +338,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (startDate, endDate, marineOnly, offset) =>
         {
-            var result = await Client.GetAphiaRecordsByDate(startDate, endDate, marineOnly, offset);
+            var result = await Client.GetRecords(startDate, endDate, marineOnly, offset);
             Program.Print(result);
         }, startDateArgument, endDateArgument, MarineOnlyOption, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaRecordsByMatchNamesCommand()
+    private static Command RecordsByMatchNamesCommand()
     {
-        var command = new Command("AphiaRecordsByMatchNames", "For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.")
+        var command = new Command("RecordsByMatchNames", "For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.")
         {
             ScientificNamesArgument,
             MarineOnlyOption
@@ -355,7 +355,7 @@ internal static class WormsCommand
 
         command.SetHandler(async (scientificNames, marineOnly) =>
         {
-            var results = await Client.GetAphiaRecordsByMatchNames(scientificNames, marineOnly);
+            var results = await Client.GetRecordsFuzzy(scientificNames, marineOnly);
             if (results is null)
             {
                 Program.WriteLineWarning("No data returned.");
@@ -371,9 +371,9 @@ internal static class WormsCommand
         return command;
     }
 
-    private static Command AphiaRecordsByNameCommand()
+    private static Command RecordsByNameCommand()
     {
-        var command = new Command("AphiaRecordsByName", "Get one or more matching (max. 50) AphiaRecords for a given name.")
+        var command = new Command("RecordsByName", "Get one or more matching (max. 50) AphiaRecords for a given name.")
         {
             ScientificNameArgument,
             LikeOption,
@@ -383,16 +383,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (scientificName, like, marineOnly, offset) =>
         {
-            var result = await Client.GetAphiaRecordsByName(scientificName, like, marineOnly, offset);
+            var result = await Client.GetRecords(scientificName, like, marineOnly, offset);
             Program.Print(result);
         }, ScientificNameArgument, LikeOption, MarineOnlyOption, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaRecordsByNamesCommand()
+    private static Command RecordsByNamesCommand()
     {
-        var command = new Command("AphiaRecordsByNames", "For each given scientific name, try to find one or more AphiaRecords. This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.")
+        var command = new Command("RecordsByNames", "For each given scientific name, try to find one or more AphiaRecords. This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.")
         {
             ScientificNamesArgument,
             LikeOption,
@@ -401,7 +401,7 @@ internal static class WormsCommand
 
         command.SetHandler(async (scientificNames, like, marineOnly) =>
         {
-            var results = await Client.GetAphiaRecordsByNames(scientificNames, like, marineOnly);
+            var results = await Client.GetRecords(scientificNames, like, marineOnly);
             if (results is null)
             {
                 Program.WriteLineWarning("No data returned.");
@@ -417,10 +417,10 @@ internal static class WormsCommand
         return command;
     }
 
-    private static Command AphiaRecordsByTaxonRankIdCommand()
+    private static Command RecordsByTaxonRankIdCommand()
     {
-        var belongsToArgument = new Argument<int>("belongsTo", "Limit the results to descendants of the given AphiaID.");
-        var command = new Command("AphiaRecordsByTaxonRankID", "Get the AphiaRecords for a given taxonRankID (max 50).")
+        var belongsToArgument = new Argument<int?>("belongsTo", () => null, "Limit the results to descendants of the given AphiaID.");
+        var command = new Command("RecordsByTaxonRankID", "Get the AphiaRecords for a given taxonRankID (max 50).")
         {
             TaxonomicIdArgument,
             belongsToArgument,
@@ -429,16 +429,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (taxonomicId, belongsTo, offset) =>
         {
-            var result = await Client.GetAphiaRecordsByTaxonRankId(taxonomicId, belongsTo, offset);
+            var result = await Client.GetRecords(taxonomicId, belongsTo, offset);
             Program.Print(result);
         }, TaxonomicIdArgument, belongsToArgument, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaSynonymsByAphiaIdCommand()
+    private static Command SynonymsCommand()
     {
-        var command = new Command("AphiaSynonymsByAphiaID", "Get all synonyms for a given AphiaID.")
+        var command = new Command("Synonyms", "Get all synonyms for a given AphiaID.")
         {
             AphiaIdArgument,
             OffsetOption
@@ -446,16 +446,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (aphiaId, offset) =>
         {
-            var result = await Client.GetAphiaSynonymsByAphiaId(aphiaId, offset);
+            var result = await Client.GetSynonyms(aphiaId, offset);
             Program.Print(result);
         }, AphiaIdArgument, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaTaxonRanksByIdCommand()
+    private static Command TaxonRanksByIdCommand()
     {
-        var command = new Command("AphiaTaxonRanksByID", "Get taxonomic ranks by their identifier.")
+        var command = new Command("TaxonRanksByID", "Get taxonomic ranks by their identifier.")
         {
             TaxonomicIdArgument,
             AphiaIdArgument,
@@ -463,16 +463,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (taxonomicId, aphiaId) =>
         {
-            var result = await Client.GetAphiaTaxonRanksById(taxonomicId, aphiaId);
+            var result = await Client.GetTaxonRanks(taxonomicId, aphiaId);
             Program.Print(result);
         }, TaxonomicIdArgument, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaTaxonRanksByNameCommand()
+    private static Command TaxonRanksByNameCommand()
     {
-        var command = new Command("AphiaTaxonRanksByName", "Get taxonomic ranks by their name.")
+        var command = new Command("TaxonRanksByName", "Get taxonomic ranks by their name.")
         {
             TaxonomicNameArgument,
             AphiaIdArgument,
@@ -480,16 +480,16 @@ internal static class WormsCommand
 
         command.SetHandler(async (taxonomicName, aphiaId) =>
         {
-            var result = await Client.GetAphiaTaxonRanksByName(taxonomicName, aphiaId);
+            var result = await Client.GetTaxonRanks(taxonomicName, aphiaId);
             Program.Print(result);
         }, TaxonomicNameArgument, AphiaIdArgument);
 
         return command;
     }
 
-    private static Command AphiaRecordsByVernacularCommand()
+    private static Command RecordsByVernacularCommand()
     {
-        var command = new Command("AphiaRecordsByVernacular", "Get taxonomic ranks by their name.")
+        var command = new Command("RecordsByVernacular", "Get taxonomic ranks by their name.")
         {
             VernacularNameArgument,
             LikeOption,
@@ -498,23 +498,23 @@ internal static class WormsCommand
 
         command.SetHandler(async (vernacularName, like, offset) =>
         {
-            var result = await Client.GetAphiaRecordsByVernacular(vernacularName, like, offset);
+            var result = await Client.GetRecordsByVernacular(vernacularName, like, offset);
             Program.Print(result);
         }, VernacularNameArgument, LikeOption, OffsetOption);
 
         return command;
     }
 
-    private static Command AphiaVernacularsByAphiaIdCommand()
+    private static Command VernacularsCommand()
     {
-        var command = new Command("AphiaVernacularsByAphiaID", "Get all vernaculars for a given AphiaID.")
+        var command = new Command("Vernaculars", "Get all vernaculars for a given AphiaID.")
         {
             AphiaIdArgument,
         };
 
         command.SetHandler(async (aphiaId) =>
         {
-            var result = await Client.GetAphiaVernacularsByAphiaId(aphiaId);
+            var result = await Client.GetVernaculars(aphiaId);
             Program.Print(result);
         }, AphiaIdArgument);
 

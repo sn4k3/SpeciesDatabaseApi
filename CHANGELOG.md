@@ -1,5 +1,10 @@
 # Change Log
 
+## 17/08/2023 - v1.2.1
+
+- Improve the `BaseClient` and remove the overloads for url parameters, now `QueryParameters` must be used instead to populate the parameters collection
+- Improve the `WormsClient` and `MarineRegionsCLient`, rename/shorten all methods
+
 ## 15/08/2023 - v1.2.0
 
 - **BaseClient**: 

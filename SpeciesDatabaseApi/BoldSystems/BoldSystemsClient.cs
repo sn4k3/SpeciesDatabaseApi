@@ -57,10 +57,10 @@ public class BoldSystemsClient : BaseClient
 	/// <returns></returns>
 	public Task<Stats?> GetStats(PublicApiParameters requestParameters, BoldStatsDataType dataType = BoldStatsDataType.DrillDown, CancellationToken token = default)
 	{
-		var parameters = GetDictionaryFromClassProperties(requestParameters);
+		var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
 		if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
-		parameters.TryAdd("dataType", StringExtensions.PrependCharByUpperChar(dataType.ToString(), '_').ToLowerInvariant());
-		parameters.TryAdd("format", "json");
+		parameters.Add("dataType", StringExtensions.PrependCharByUpperChar(dataType.ToString(), '_').ToLowerInvariant());
+		parameters.Add("format", "json");
 		return GetJsonAsync<Stats>("API_Public/stats", parameters, token);
 	}
 
@@ -72,9 +72,9 @@ public class BoldSystemsClient : BaseClient
 	/// <returns></returns>
 	public Task<SpecimenResults?> GetSpecimen(PublicApiParameters requestParameters, CancellationToken token = default)
 	{
-		var parameters = GetDictionaryFromClassProperties(requestParameters);
-		if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
-		parameters.TryAdd("format", "json");
+        var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
+        if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
+		parameters.Add("format", "json");
 		return GetJsonAsync<SpecimenResults>("API_Public/specimen", parameters, token);
 	}
 
@@ -87,7 +87,7 @@ public class BoldSystemsClient : BaseClient
     /// <returns></returns>
     public async Task<List<SequenceData>> GetSequences(PublicApiParameters requestParameters, CancellationToken token = default)
     {
-        var parameters = GetDictionaryFromClassProperties(requestParameters);
+        var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
         if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
         using var response = await GetResponseAsync("API_Public/sequence", parameters, token).ConfigureAwait(false);
 
@@ -129,9 +129,9 @@ public class BoldSystemsClient : BaseClient
     /// <returns></returns>
     public Task<SpecimenResults?> GetSpecimenAndSequence(PublicApiParameters requestParameters, CancellationToken token = default)
     {
-        var parameters = GetDictionaryFromClassProperties(requestParameters);
+        var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
         if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
-        parameters.TryAdd("format", "json");
+        parameters.Add("format", "json");
         return GetJsonAsync<SpecimenResults>("API_Public/combined", parameters, token);
     }
 
@@ -144,7 +144,7 @@ public class BoldSystemsClient : BaseClient
     /// <returns></returns>
     public Task DownloadTraceFile(PublicApiParameters requestParameters, Stream stream, CancellationToken token = default)
     {
-        var parameters = GetDictionaryFromClassProperties(requestParameters);
+        var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
         if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
         return DownloadAsync("API_Public/trace", parameters, stream, token);
     }
@@ -158,7 +158,7 @@ public class BoldSystemsClient : BaseClient
     /// <returns></returns>
     public async Task DownloadTraceFile(PublicApiParameters requestParameters, string filePath, CancellationToken token = default)
     {
-        var parameters = GetDictionaryFromClassProperties(requestParameters);
+        var parameters = new QueryParameters(QueryParametersSpecialType.ClassPropertiesReflection, requestParameters);
         if (parameters.Count == 0) throw new ArgumentException("The call require at least one parameter", nameof(requestParameters));
 
         await using var fs = File.Open(filePath, FileMode.Create);
@@ -174,7 +174,7 @@ public class BoldSystemsClient : BaseClient
     /// <returns>the top public matches (up to 100) can be retrieved by querying a COI sequence.</returns>
     public Task<TaxonData?> GetTaxonData(int taxId, BoldDataTypesEnum dataTypes = BoldDataTypesEnum.Basic, CancellationToken token = default)
 	{
-		var parameters = new Dictionary<string, object?>
+		var parameters = new QueryParameters
 		{
 			{"taxId", taxId},
 			{"dataTypes", dataTypes},
@@ -192,8 +192,8 @@ public class BoldSystemsClient : BaseClient
 	/// <returns>the top public matches (up to 100) can be retrieved by querying a COI sequence.</returns>
 	public Task<Dictionary<int, TaxonData>?> GetTaxonDataIncludeTree(int taxId, BoldDataTypesEnum dataTypes = BoldDataTypesEnum.Basic, CancellationToken token = default)
 	{
-		var parameters = new Dictionary<string, object?>
-		{
+		var parameters = new QueryParameters
+        {
 			{"taxId", taxId},
 			{"dataTypes", dataTypes},
 			{"includeTree", true}
@@ -210,7 +210,7 @@ public class BoldSystemsClient : BaseClient
 	/// <returns>the top public matches (up to 100) can be retrieved by querying a COI sequence.</returns>
 	public Task<TaxonSearch?> GetTaxonData(string taxName, bool fuzzy = false, CancellationToken token = default)
 	{
-		var parameters = new Dictionary<string, object?>
+		var parameters = new QueryParameters
 		{
 			{"taxName", taxName},
 			{"fuzzy", fuzzy},
@@ -227,7 +227,7 @@ public class BoldSystemsClient : BaseClient
 	/// <returns>the top public matches (up to 100) can be retrieved by querying a COI sequence.</returns>
 	public Task<CoiMatches?> GetCoiMatches(BoldDatabaseEnum db, string sequence, CancellationToken token = default)
     {
-        var parameters = new Dictionary<string, object?>
+        var parameters = new QueryParameters
         {
             {"db", db},
             {"sequence", sequence}

@@ -4,7 +4,7 @@
 		<Authors>Tiago Conceição (sn4k3)</Authors>
 		<Company>PTRTECH</Company>
 		<Copyright>Copyright 2023-$([System.DateTime]::Now.ToString(`yyyy`)) © PTRTECH</Copyright>
-		<Version>1.2.0</Version>
+		<Version>1.2.1</Version>
 		<Description>Queries and fetch data from species, taxon, regions and conservation database(s) to retrieve information using the provider API.</Description>
 		<ApplicationIcon>$(MSBuildThisFileDirectory)images/icon.ico</ApplicationIcon>
 

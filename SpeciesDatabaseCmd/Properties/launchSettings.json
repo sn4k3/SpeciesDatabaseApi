@@ -1,5 +1,9 @@
 {
   "profiles": {
+    "WORMS RecordsByAphiaIDs 105792 105793": {
+      "commandName": "Project",
+      "commandLineArgs": "WORMS RecordsByAphiaIDs 105792 105793"
+    },
     "IUCN Version": {
       "commandName": "Project",
       "commandLineArgs": "IUCN Version"
@@ -36,25 +40,25 @@
       "commandName": "Project",
       "commandLineArgs": "IUCN SpeciesCount europe"
     },
-    "IUCN SpeciesCitationByName \"Loxodonta Africana\"": {
+    "IUCN SpecieCitationByName \"Loxodonta Africana\"": {
       "commandName": "Project",
       "commandLineArgs": "IUCN SpecieCitationByName \"Loxodonta Africana\""
     },
-    "IUCN SpeciesCitationById 181008073": {
+    "IUCN SpecieCitationById 181008073": {
       "commandName": "Project",
       "commandLineArgs": "IUCN SpecieCitationById 181008073"
     },
-    "IUCN SpeciesCitationById 2467 europe": {
+    "IUCN SpecieCitationById 2467 europe": {
       "commandName": "Project",
       "commandLineArgs": "IUCN SpecieCitationById 2467 europe"
     },
-    "MARINEREGIONS GazetteerRecordsByName belgian": {
+    "MARINEREGIONS RecordsByName belgian": {
       "commandName": "Project",
-      "commandLineArgs": "MARINEREGIONS GazetteerRecordsByName belgian"
+      "commandLineArgs": "MARINEREGIONS RecordsByName belgian"
     },
-    "MARINEREGIONS GazetteerRecordsByNames belgian portugal spain": {
+    "MARINEREGIONS RecordsByNames belgian portugal spain": {
       "commandName": "Project",
-      "commandLineArgs": "MARINEREGIONS GazetteerRecordsByNames belgian portugal spain"
+      "commandLineArgs": "MARINEREGIONS RecordsByNames belgian portugal spain"
     },
     "MARINEREGIONS Feed": {
       "commandName": "Project",
