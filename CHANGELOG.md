@@ -1,5 +1,10 @@
 # Change Log
 
+## 20/08/2023 - v1.2.2
+
+- Improve `QueryParameters` to enforce a value case conversion
+- Fix `WormsClient`: `GetExternalId` and `GetRecordByExternalId` must send the type in lower-case
+
 ## 17/08/2023 - v1.2.1
 
 - Improve the `BaseClient` and remove the overloads for url parameters, now `QueryParameters` must be used instead to populate the parameters collection

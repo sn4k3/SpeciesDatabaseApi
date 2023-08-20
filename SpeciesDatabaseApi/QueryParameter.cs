@@ -18,19 +18,32 @@ public class QueryParameter : IEquatable<QueryParameter>
     /// </summary>
     public object? Value { get; init; }
 
-    public QueryParameter(string key, object? value)
+    /// <summary>
+    /// Enforce a case conversion
+    /// </summary>
+    public QueryParameterCase ValueCase { get; init; }
+
+    public QueryParameter(string key, object? value, QueryParameterCase valueCase = QueryParameterCase.None)
     {
         Key = key;
         Value = value;
+        ValueCase = valueCase;
     }
 
-    public QueryParameter(KeyValuePair<string, object?> keyValuePair) : this(keyValuePair.Key, keyValuePair.Value)
+    public QueryParameter(KeyValuePair<string, object?> keyValuePair, QueryParameterCase valueCase = QueryParameterCase.None) : this(keyValuePair.Key, keyValuePair.Value, valueCase)
     {
     }
 
     public override string ToString()
     {
-        return $"{Key}={Value}";
+        var value = ValueCase switch
+        {
+            QueryParameterCase.None => Value?.ToString(),
+            QueryParameterCase.Lower => Value?.ToString()?.ToLower(),
+            QueryParameterCase.Upper => Value?.ToString()?.ToUpper(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        return $"{Key}={value}";
     }
 
     public string? ToUrlString()
@@ -61,7 +74,15 @@ public class QueryParameter : IEquatable<QueryParameter>
                     foreach (var arrayItem in items)
                     {
                         if (sb.Length > 0) sb.Append('&');
-                        sb.Append($"{Uri.EscapeDataString(Key)}={Uri.EscapeDataString(arrayItem)}");
+
+                        value = ValueCase switch
+                        {
+                            QueryParameterCase.None => arrayItem,
+                            QueryParameterCase.Lower => arrayItem.ToLower(),
+                            QueryParameterCase.Upper => arrayItem.ToUpper(),
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
+                        sb.Append($"{Uri.EscapeDataString(Key)}={Uri.EscapeDataString(value)}");
                     }
 
                     return sb.ToString();
@@ -94,6 +115,14 @@ public class QueryParameter : IEquatable<QueryParameter>
                 if (string.IsNullOrWhiteSpace(value)) return null;
                 break;
         }
+
+        value = ValueCase switch
+        {
+            QueryParameterCase.None => value,
+            QueryParameterCase.Lower => value.ToLower(),
+            QueryParameterCase.Upper => value.ToUpper(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         return $"{Uri.EscapeDataString(Key)}={Uri.EscapeDataString(value)}";
     }

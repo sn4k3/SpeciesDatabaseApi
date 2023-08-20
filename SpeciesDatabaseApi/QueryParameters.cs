@@ -15,6 +15,24 @@ public enum QueryParametersSpecialType
     ClassPropertiesReflection
 }
 
+public enum QueryParameterCase
+{
+    /// <summary>
+    /// As set, do not force case
+    /// </summary>
+    None,
+
+    /// <summary>
+    /// Force lower case
+    /// </summary>
+    Lower,
+
+    /// <summary>
+    /// Force upper case
+    /// </summary>
+    Upper,
+}
+
 /// <summary>
 /// Handles query parameters and build the string, avoiding any null value
 /// </summary>
@@ -38,9 +56,10 @@ public class QueryParameters : List<QueryParameter>
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public QueryParameters(string key, object? value, bool distinct = false) : this(1)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public QueryParameters(string key, object? value, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None) : this(1)
     {
-        Add(key, value, distinct);
+        Add(key, value, distinct, valueCase);
     }
 
     /// <summary>
@@ -48,9 +67,10 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="keyValuePair"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public QueryParameters(KeyValuePair<string, object?> keyValuePair, bool distinct = false) : this(1)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public QueryParameters(KeyValuePair<string, object?> keyValuePair, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None) : this(1)
     {
-        Add(keyValuePair, distinct);
+        Add(keyValuePair, distinct, valueCase);
     }
 
     /// <summary>
@@ -58,9 +78,10 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="list"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public QueryParameters(IEnumerable<KeyValuePair<string, object?>> list, bool distinct = false) : this(list.Count())
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public QueryParameters(IEnumerable<KeyValuePair<string, object?>> list, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None) : this(list.Count())
     {
-        Add(list, distinct);
+        Add(list, distinct, valueCase);
     }
 
 
@@ -69,9 +90,10 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="dictionary"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public QueryParameters(IReadOnlyDictionary<string, object?> dictionary, bool distinct = false) : this(dictionary.Count)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public QueryParameters(IReadOnlyDictionary<string, object?> dictionary, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None) : this(dictionary.Count)
     {
-        Add(dictionary, distinct);
+        Add(dictionary, distinct, valueCase);
     }
 
 
@@ -93,11 +115,12 @@ public class QueryParameters : List<QueryParameter>
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public void Add(string key, object? value, bool distinct = false)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public void Add(string key, object? value, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None)
     {
         if (value is null) return;
         if (distinct && this.Any(queryParameter => queryParameter.Key == key)) return;
-        Add(new QueryParameter(key, value));
+        Add(new QueryParameter(key, value, valueCase));
     }
 
     /// <summary>
@@ -105,11 +128,10 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="keyValuePair"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public void Add(KeyValuePair<string, object?> keyValuePair, bool distinct = false)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public void Add(KeyValuePair<string, object?> keyValuePair, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None)
     {
-        if (keyValuePair.Value is null) return;
-        if (distinct && this.Any(queryParameter => queryParameter.Key == keyValuePair.Key)) return;
-        Add(new QueryParameter(keyValuePair));
+        Add(keyValuePair.Key, keyValuePair.Value, distinct, valueCase);
     }
 
     /// <summary>
@@ -117,11 +139,12 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="list"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public void Add(IEnumerable<KeyValuePair<string, object?>> list, bool distinct = false)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public void Add(IEnumerable<KeyValuePair<string, object?>> list, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None)
     {
         foreach (var keyValuePair in list)
         {
-            Add(keyValuePair, distinct);
+            Add(keyValuePair, distinct, valueCase);
         }
     }
 
@@ -130,11 +153,12 @@ public class QueryParameters : List<QueryParameter>
     /// </summary>
     /// <param name="dictionary"></param>
     /// <param name="distinct">True to only add distinct keys</param>
-    public void Add(IReadOnlyDictionary<string, object?> dictionary, bool distinct = false)
+    /// <param name="valueCase">Enforce a value case conversion</param>
+    public void Add(IReadOnlyDictionary<string, object?> dictionary, bool distinct = false, QueryParameterCase valueCase = QueryParameterCase.None)
     {
         foreach (var keyValuePair in dictionary)
         {
-            Add(keyValuePair, distinct);
+            Add(keyValuePair, distinct, valueCase);
         }
     }
 

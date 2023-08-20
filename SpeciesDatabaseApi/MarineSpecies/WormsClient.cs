@@ -116,7 +116,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<string[]?> GetExternalId(int aphiaId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
     {
-        var parameters = new QueryParameters("type", type);
+        var parameters = new QueryParameters("type", type, valueCase:QueryParameterCase.Lower);
         return GetJsonAsync<string[]>($"AphiaExternalIDByAphiaID/{aphiaId}", parameters, token);
     }
 
@@ -129,7 +129,7 @@ public class WormsClient : BaseClient
     /// <returns></returns>
     public Task<AphiaRecord?> GetRecordByExternalId(string externalId, ExternalIdentifierTypeEnum type, CancellationToken token = default)
     {
-        var parameters = new QueryParameters("type", type);
+        var parameters = new QueryParameters("type", type, valueCase: QueryParameterCase.Lower);
         return GetJsonAsync<AphiaRecord>($"AphiaRecordByExternalID/{externalId}", parameters, token);
     }
     #endregion
